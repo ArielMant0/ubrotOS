@@ -62,6 +62,8 @@ private:
     
     O_Stream(const O_Stream &copy); // Verhindere Kopieren
 
+    void calc_num(char c);
+
     Mode m_mode;
 };
 

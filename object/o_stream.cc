@@ -62,20 +62,7 @@ O_Stream& O_Stream::operator<<(int number)
 
 O_Stream& O_Stream::operator<<(unsigned long number)
 {
-	char tmp[32];
-	short length = 0;
-
-	for (short i = 0; number > 0; ++i, ++length)
-	{
-		number = number / 10;
-		tmp[i] = (number % 10); // wrong way around
-	}
-
-	for (short i = 1; i <= length; ++i)
-	{
-		putc(tmp[length-i]); // right way around
-	}
-
+	calc_num(number);
 	return *this;
 }
 
@@ -99,32 +86,72 @@ char O_Stream::get_buffer_at(unsigned int i)
 	return m_buffer[i];
 }
 
-O_Stream& endl (O_Stream& os)
+void O_Stream::calc_num(long number)
+{
+	char tmp[64];
+	short length = 0;
+	short divisor;
+
+	switch (m_mode)
+	{
+		case Mode::BIN:
+			divisor = 2;
+			break;
+		case Mode::HEX:
+			divisor = 16;
+			// TODO: special case, do stuff here
+			for (short i = 0; number > 0; ++i, ++length)
+			{
+				number = number / 16;
+				long tmp = (number % 16);
+				tmp[i] = tmp < 10 ? tmp : tmp; // wrong way around
+			}
+			break;
+		case Mode::OCT:
+			divisor = 8;
+			break;
+		case Mode::DEC:
+			divisor = 10;
+			break;
+	}
+
+	for (short i = 0; m_mode != Mode::HEX && number > 0; ++i, ++length)
+	{
+		number = number / divisor;
+		tmp[i] = (number % divisor); // wrong way around
+	}
+	for (short i = 1; i <= length; ++i)
+	{
+		putc(tmp[length-i]); // right way around
+	}
+}
+
+O_Stream& endl(O_Stream& os)
 {
 	os.putc('\n');
 	os.flush();
 	return os;
 }
 
-O_Stream& bin (O_Stream& os)
+O_Stream& bin(O_Stream& os)
 {
 	os.set_mode(O_Stream::Mode::BIN);
 	return os;
 }
 
-O_Stream& oct (O_Stream& os)
+O_Stream& oct(O_Stream& os)
 {
 	os.set_mode(O_Stream::Mode::OCT);
 	return os;
 }
 
-O_Stream& dec (O_Stream& os)
+O_Stream& dec(O_Stream& os)
 {
 	os.set_mode(O_Stream::Mode::DEC);
 	return os;
 }
 
-O_Stream& hex (O_Stream& os)
+O_Stream& hex(O_Stream& os)
 {
 	os.set_mode(O_Stream::Mode::HEX);
 	return os;
