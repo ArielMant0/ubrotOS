@@ -15,6 +15,12 @@
 
 #include "object/strbuf.h"
 
+
+Stringbuffer::Stringbuffer()
+{
+   m_pos = 0;
+} 
+
 void Stringbuffer::putc(char c)
 {
   if (m_pos >= MAX_SIZE)

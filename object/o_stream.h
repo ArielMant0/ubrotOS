@@ -32,7 +32,7 @@ public:
 		HEX
 	};
 
-	O_Stream() : m_mode(Mode.DEZ);
+	O_Stream() : m_mode(Mode::DEZ) {}
 
 	O_Stream& operator<<(unsigned char c);
 	O_Stream& operator<<(char c);

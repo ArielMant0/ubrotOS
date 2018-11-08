@@ -29,7 +29,8 @@ protected:
   int m_pos;
 
 public:
-  
+ 
+  Stringbuffer(); 
   void putc(char c);
 
   virtual void flush() = 0;
