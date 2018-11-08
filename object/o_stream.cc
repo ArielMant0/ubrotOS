@@ -18,9 +18,14 @@
 
 #include "object/o_stream.h"
 
-void flush()
+void O_Stream::flush()
 {
-	
+	m_pos = 0;
+}
+
+void O_Stream::set_mode(O_Stream::Mode m)
+{
+	m_mode = m;
 }
 
 O_Stream& O_Stream::operator<<(unsigned char c)
@@ -57,11 +62,20 @@ O_Stream& O_Stream::operator<<(int number)
 
 O_Stream& O_Stream::operator<<(unsigned long number)
 {
-	while (number > 0)
+	char tmp[32];
+	short length = 0;
+
+	for (short i = 0; number > 0; ++i, ++length)
 	{
 		number = number / 10;
-		putc(number % 10); // wrong way around
-	}	
+		tmp[i] = (number % 10); // wrong way around
+	}
+
+	for (short i = 1; i <= length; ++i)
+	{
+		putc(tmp[length-i]); // right way around
+	}
+
 	return *this;
 }
 
@@ -72,5 +86,46 @@ O_Stream& O_Stream::operator<<(long number)
 		putc('-');
 		number *= -1;
 	}
-        return operator<<((unsigned long)number); 
+    return operator<<((unsigned long)number); 
+}
+
+O_Stream& O_Stream::operator<<(O_Stream& (*fkt) (O_Stream&))
+{
+	return fkt(*this);
+}
+
+char O_Stream::get_buffer_at(unsigned int i)
+{
+	return m_buffer[i];
+}
+
+O_Stream& endl (O_Stream& os)
+{
+	os.putc('\n');
+	os.flush();
+	return os;
+}
+
+O_Stream& bin (O_Stream& os)
+{
+	os.set_mode(O_Stream::Mode::BIN);
+	return os;
+}
+
+O_Stream& oct (O_Stream& os)
+{
+	os.set_mode(O_Stream::Mode::OCT);
+	return os;
+}
+
+O_Stream& dec (O_Stream& os)
+{
+	os.set_mode(O_Stream::Mode::DEC);
+	return os;
+}
+
+O_Stream& hex (O_Stream& os)
+{
+	os.set_mode(O_Stream::Mode::HEX);
+	return os;
 }

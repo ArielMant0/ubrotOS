@@ -26,13 +26,17 @@ class O_Stream : public Stringbuffer
 public:
 
 	enum Mode {
-		DEZ,
+		DEC,
 		BIN,
 		OCT,
 		HEX
 	};
 
-	O_Stream() : m_mode(Mode::DEZ) {}
+	O_Stream() : m_mode(Mode::DEC) {}
+
+	void flush(); //override;
+
+	void set_mode(Mode m);
 
 	O_Stream& operator<<(unsigned char c);
 	O_Stream& operator<<(char c);
@@ -52,12 +56,14 @@ public:
 	O_Stream& operator<<(O_Stream& (*fkt) (O_Stream&));
 
 
+	char get_buffer_at(unsigned int i);
+
 private:
     
     O_Stream(const O_Stream &copy); // Verhindere Kopieren
 
     Mode m_mode;
-
+};
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -73,20 +79,18 @@ private:
 /*---------------------------------------------------------------------------*/
 
 // ENDL: fuegt einen Zeilenumbruch in die Ausgabe ein.
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+O_Stream& endl (O_Stream& os);
 
 // BIN: waehlt das binaere Zahlensystem aus.
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
-        
+O_Stream& bin (O_Stream& os);
+
 // OCT: waehlt das oktale Zahlensystem aus.
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
-        
+O_Stream& oct (O_Stream& os);
+
 // DEC: waehlt das dezimale Zahlensystem aus.
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+O_Stream& dec (O_Stream& os);
         
 // HEX: waehlt das hexadezimale Zahlensystem aus.
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
-
-};
+O_Stream& hex (O_Stream& os);
 
 #endif

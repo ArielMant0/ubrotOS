@@ -3,6 +3,7 @@
 /* Hier muesst ihr selbst Code vervollstaendigen */ 
 
 #include "machine/cgascr.h"
+#include "object/o_stream.h"
 
 void test_cga_screen()
 {
@@ -67,9 +68,23 @@ void test_cga_screen()
     }
 }
 
+void test_ostream()
+{
+    O_Stream os;
+    CGA_Screen cga;
+
+    os << 's' << 1 << 'g' << -487 << endl;
+
+    for (int i = 0; i < 8; ++i)
+    {
+        cga.show(i, 10, os.get_buffer_at(i));
+    }
+}
+
 int main()
 {
-	test_cga_screen();
+	// test_cga_screen();
+    test_ostream();
 
    	return 0;
 }
