@@ -18,11 +18,6 @@
 #define MAX_X 80
 #define MAX_Y 25 
 
-CGA_Screen::CGA_Screen()
-{
-  m_x = m_y = 0;
-}
-
 void CGA_Screen::show(int x, int y, char c, unsigned char attrib)
 {
   char *pos = (char*)(CGA_START + 2*(x + y*MAX_X));

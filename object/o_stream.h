@@ -25,6 +25,15 @@ class O_Stream : public Stringbuffer
 {
 public:
 
+	enum Mode {
+		DEZ,
+		BIN,
+		OCT,
+		HEX
+	};
+
+	O_Stream() : m_mode(Mode.DEZ);
+
 	O_Stream& operator<<(unsigned char c);
 	O_Stream& operator<<(char c);
 
@@ -46,6 +55,9 @@ public:
 private:
     
     O_Stream(const O_Stream &copy); // Verhindere Kopieren
+
+    Mode m_mode;
+
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */

@@ -33,7 +33,7 @@ private:
 
 public:
 
-   CGA_Screen();
+   CGA_Screen() : m_x(0), m_y(0);
 
    void show(int x, int y, char c, unsigned char attrib=BLACK_ON_WHITE);
 
