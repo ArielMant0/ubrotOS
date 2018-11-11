@@ -17,11 +17,13 @@
 #include "object/o_stream.h"
 #include "machine/cgascr.h"
 
+CGA_Stream kout;
+
 class CGA_Stream : public O_Stream
 {
 public:
 
-      CGA_Stream(CGA_Screen &cga);
+      CGA_Stream();
 
       void flush() override;
 

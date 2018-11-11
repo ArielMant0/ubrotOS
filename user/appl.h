@@ -12,15 +12,23 @@
 #define __application_include__
 
 class Application 
- 
- {
+{
 private:
+
     Application (const Application &copy); // Verhindere Kopieren
 
+    bool test_cga_screen();
+    bool test_o_stream();
+    bool test_cga_stream();
+
 public:
-/* Hier muesst ihr selbst Code vervollstaendigen */                  
           
+    Application() {}
+
     void action ();
- };
+
+    bool test();
+
+};
 
 #endif

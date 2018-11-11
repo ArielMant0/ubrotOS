@@ -13,9 +13,11 @@
 
 #include "device/cgastr.h"
 
-CGA_Stream::CGA_Stream(CGA_Screen &cga) : O_Stream()
+CGA_Screen cga_screen;
+
+CGA_Stream::CGA_Stream() : O_Stream()
 {
-    *m_screen = cga;
+    *m_screen = cga_screen;
 }
 
 void CGA_Stream::flush()

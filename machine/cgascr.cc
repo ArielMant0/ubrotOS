@@ -61,7 +61,7 @@ void CGA_Screen::calc_next_pos(int x, int y, int &x_to, int &y_to)
 {
   if (x < 0 || y < 0)
   {
-    print("Error in calc_next_pos\n", 23, WHITE_ON_BLACK);
+    print("Error in calc_next_pos\n", 23);
   }
 
   // Check if limit (x or y) is exceeded

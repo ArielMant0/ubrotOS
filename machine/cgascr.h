@@ -15,10 +15,6 @@
 
 #include "machine/io_port.h"
 
-#define WHITE_ON_BLACK 0x0f
-#define BLACK_ON_WHITE 0xf0
-
-
 class CGA_Screen
 {
 private: 
@@ -33,15 +29,25 @@ private:
 
 public:
 
+    /**
+     * Enum that specifies all color attributes for the screen
+     *  1. color = background
+     *  2. color = foreground
+     */
+    enum Attributes : char {
+        white_black = 0x0f,
+        black_white = 0xf0
+    };
+
    CGA_Screen() : m_x(0), m_y(0) {}
 
-   void show(int x, int y, char c, unsigned char attrib=BLACK_ON_WHITE);
+   void show(int x, int y, char c, unsigned char attrib=char(black_white));
 
    void setpos(int x, int y);
 
    void getpos(int &x, int &y);
 
-   void print(char *text, int length, unsigned char attrib=BLACK_ON_WHITE);
+   void print(char *text, int length, unsigned char attrib=char(black_white));
 
    char get_char(int x, int y);
 
