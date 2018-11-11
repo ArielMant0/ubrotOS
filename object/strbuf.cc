@@ -27,5 +27,5 @@ void Stringbuffer::putc(char c)
   {
     flush();
   }
-  m_buffer[m_pos] = c;
+  m_buffer[m_pos++] = c;
 }

@@ -32,9 +32,9 @@ public:
 		HEX
 	};
 
-	O_Stream() : m_mode(Mode::DEC) {}
+	O_Stream() : Stringbuffer(), m_mode(Mode::DEC) {}
 
-	void flush(); //override;
+	void flush() override;
 
 	void set_mode(Mode m);
 
@@ -62,7 +62,8 @@ private:
     
     O_Stream(const O_Stream &copy); // Verhindere Kopieren
 
-    void calc_num(char c);
+    void calc_num(long number);
+    void calc_num(unsigned long number);
 
     Mode m_mode;
 };

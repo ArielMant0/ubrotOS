@@ -3,12 +3,10 @@
 /* Hier muesst ihr selbst Code vervollstaendigen */ 
 
 #include "machine/cgascr.h"
-#include "object/o_stream.h"
+#include "device/cgastr.h"
 
-void test_cga_screen()
+void test_cga_screen(CGA_Screen &cga)
 {
-    CGA_Screen cga;
-
     // simple write
     cga.show(20, 0, 'a');
     if (cga.get_char(20, 0) != 'a')
@@ -68,10 +66,9 @@ void test_cga_screen()
     }
 }
 
-void test_ostream()
+void test_ostream(CGA_Screen &cga)
 {
     O_Stream os;
-    CGA_Screen cga;
 
     os << 's' << 1 << 'g' << -487 << endl;
 
@@ -81,10 +78,20 @@ void test_ostream()
     }
 }
 
+void test_cga_stream(CGA_Screen &cga)
+{
+    CGA_Stream cgs(cga);
+
+    cgs << 's' << 1 << 'g' << -487 << endl;
+    cgs.flush();
+}
+
 int main()
 {
-	// test_cga_screen();
-    test_ostream();
+    CGA_Screen cga;
+	// test_cga_screen(cga);
+    test_ostream(cga);
+    test_cga_stream(cga);
 
    	return 0;
 }
