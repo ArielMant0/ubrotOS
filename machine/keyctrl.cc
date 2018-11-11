@@ -11,6 +11,8 @@
 /* INCLUDES */
 
 #include "machine/keyctrl.h"
+
+#define MAX_WAIT 1000
  
 /* STATIC MEMERS */
 
@@ -176,13 +178,13 @@ bool Keyboard_Controller::key_decoded ()
      return true;
    else
      return false;
- }
+}
 
 // GET_ASCII_CODE: ermittelt anhand von Tabellen aus dem Scancode und
 //                 den gesetzten Modifier-Bits den ASCII Code der Taste.
 
 void Keyboard_Controller::get_ascii_code ()
-   {
+{
      // Sonderfall Scancode 53: Dieser Code wird sowohl von der Minustaste
      // des normalen Tastaturbereichs, als auch von der Divisionstaste des
      // Ziffernblocks gesendet. Damit in beiden Faellen ein Code heraus-
@@ -269,14 +271,25 @@ Keyboard_Controller::Keyboard_Controller () :
 //          mit Key::valid () ueberprueft werden kann.
 
 Key Keyboard_Controller::key_hit ()
- {
-   Key invalid;  // nicht explizit initialisierte Tasten sind ungueltig
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
-/* Hier muesst ihr selbst Code vervollstaendigen */          
- 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
-   return invalid;
- }
+{
+    Key invalid;  // nicht explizit initialisierte Tasten sind ungueltig
+    int status, counter = 0;
+    // Wait for key input
+    do
+    {
+        status = ctrl_port.inb();
+    } while (status != 0x01 && counter++ < MAX_WAIT);
+    // Read code
+    code = data_port.inb();
+    // Decode scan code
+    if (!key_decoded())
+    {
+        return invalid;
+    }
+    get_ascii_code();
+
+    return gather;
+}
 
 // REBOOT: Fuehrt einen Neustart des Rechners durch. Ja, beim PC macht
 //         das der Tastaturcontroller.
@@ -305,21 +318,45 @@ void Keyboard_Controller::reboot ()
 //                  schnell die Tastencodes aufeinander folgen soll.
 //                  Erlaubt sind Werte zwischen 0 (sehr schnell) und 31
 //                  (sehr langsam).
-
 void Keyboard_Controller::set_repeat_rate (int speed, int delay)
- {
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
- 
-/* Hier muesst ihr selbst Code vervollstaendigen */          
-          
- }
+{
+    // TODO: error handling for wrong values
+    int status, counter = 0;
+    // Set command byte in data port
+    data_port.outb(kbd_cmd::set_speed);
+    // Wait for acknowledgement
+    do
+    {
+        status = ctrl_port.inb();
+    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
+    // Write data byte to data port
+    data_port.outb((delay << 4) & speed);
+    counter = 0;
+    // Wait for acknowledgement
+    do
+    {
+        status = ctrl_port.inb();
+    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
+}
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
-
 void Keyboard_Controller::set_led (char led, bool on)
- {
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
- 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
-          
- }
+{
+    // TODO: error handling for wrong values
+    int status, counter = 0;
+    // Set command byte in data port
+    data_port.outb(kbd_cmd::set_led);
+    // Wait for acknowledgement
+    do
+    {
+        status = ctrl_port.inb();
+    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
+    // Write data byte to data port
+    data_port.outb(led & (on ? led : char(0)));
+    // Wait for acknowledgement
+    counter = 0;
+    do
+    {
+        status = ctrl_port.inb();
+    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);     
+}
