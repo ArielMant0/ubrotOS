@@ -13,7 +13,7 @@
 
 #include "device/cgastr.h"
 
-CGA_Screen cga_screen;
+CGA_Screen cga_screen; // TODO extern? warum pointer wenns eh global ist ?
 
 CGA_Stream::CGA_Stream() : O_Stream()
 {
@@ -22,9 +22,9 @@ CGA_Stream::CGA_Stream() : O_Stream()
 
 void CGA_Stream::flush()
 {
-    for (int i = 0; i < m_pos; i++)
-    {
+    //for (int i = 0; i < m_pos; i++)
+    //{
         m_screen->print(m_buffer, m_pos);   
-    }
+    //}
     O_Stream::flush();
 }

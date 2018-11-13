@@ -20,6 +20,7 @@ private:
     bool test_cga_screen();
     bool test_o_stream();
     bool test_cga_stream();
+    bool test_keyboard();
 
 public:
           

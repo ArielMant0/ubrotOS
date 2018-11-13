@@ -12,21 +12,45 @@
 
 #include "user/appl.h"
 #include "device/cgastr.h"
+#include "machine/keyctrl.h"
          
 /* GLOBALE VARIABLEN */
 
-extern CGA_Stream kout;
+/*extern */CGA_Stream kout; // TODO
 
-const char TEST_RESULT[] = { 's', '1', 'g', '-', '4', '8', '7', '\n' };
+const char TEST_RESULT1[] = { 's', '1', 'g', '-', '4', '8', '7', '\n' };
+const char TEST_RESULT2[] = 
+{ 
+    '-', '1', ' ', '4', '8', '7', ' ', '-',
+    '1', '2', '3', '4', '5', '9', '8', '7', 
+    '6', ' ', '1'
+};
+const char TEST_RESULT3[] = 
+{ 
+    '2', ' ', '1', '0', ' ', '1', '0', '1',
+    '1', '1', ' ', '2', '3', '\n'
+};
+const char TEST_RESULT4[] = 
+{ 
+    '8', ' ', '1', '0', ' ', '2', '7', ' ',
+    '2', '3', '\n'
+};
+const char TEST_RESULT5[] = 
+{ 
+    '1', '0', ' ', 'A', ' ', 'B', '1', ' ', '1',
+    '7', '7', '\n'
+};
 
 bool Application::test_cga_screen()
 {
+    CGA_Screen cga; // TODO
+
     // simple write
     cga.show(20, 0, 'a');
     if (cga.get_char(20, 0) != 'a')
     {
     	cga.show(10, 10, '!');
-    	return;
+    	return false;
     }
     else
     {
@@ -40,7 +64,7 @@ bool Application::test_cga_screen()
     if (x != 0 || y != 10)
     {
     	cga.show(10, 10, '!');
-    	return;
+    	return false;
     }
     else
     {
@@ -56,7 +80,7 @@ bool Application::test_cga_screen()
     cga.getpos(x, y);
     if (x != 0 || y != 16)
     {
-     	return;
+     	return false;
     }
 
 	// more newline in text
@@ -64,7 +88,7 @@ bool Application::test_cga_screen()
     cga.print("Hallo 3!\nwuhuw\n", 15);
 
     // scrolling
-    for (int count = 0;; ++count)
+    for (int count = 0; false; ++count)
     {
     	switch ((count/400) % 4)
     	{
@@ -78,18 +102,22 @@ bool Application::test_cga_screen()
     			cga.print("\\\n", 2); break;
     	}
     }
+
+    return true;
 }
 
 bool Application::test_o_stream()
 {
+    CGA_Screen cga; // TODO
     O_Stream os;
 
-    os << 's' << 1 << 'g' << -487 << '\n';
+    os << 's' << 1 << 'g' << -487 << '\n'; // TODO wenn ich jetzt hier endl mache, soll das dann ausgegeben werden oder nicht ?
 
     for (int i = 0; i < 8; ++i)
     {
-        if (os.get_buffer_at(i) != TEST_RESULT[i])
+        if (os.get_buffer_at(i) != TEST_RESULT1[i])
         {
+            cga.print_error("appl.cc", 7);
             return false;
         }
     }
@@ -99,12 +127,67 @@ bool Application::test_o_stream()
 
 bool Application::test_cga_stream()
 {
+    CGA_Screen cga;
+
+    // test char, unsingned char, int und unsigned int und \n
     kout << 's' << 1 << 'g' << -487 << '\n';
 
     for (int i = 0; i < 8; ++i)
     {
-        if (kout.get_buffer_at(i) != TEST_RESULT[i])
+        if (kout.get_buffer_at(i) != TEST_RESULT1[i])
         {
+            cga.print_error("appl.cc", 7);
+            return false;
+        }
+    }
+
+    kout.flush();
+
+    // test short, unsigned short, long und unsigned long und endl
+    kout << (short)-1 << ' ' << (unsigned short)487 << ' ' << -123459876 << ' ' << (unsigned long) 1 << endl;
+
+    for (int i = 0; i < 19; ++i)
+    {
+        if (kout.get_buffer_at(i) != TEST_RESULT2[i])
+        {
+            cga.print_error("appl.cc", 7);
+            return false;
+        }
+    }
+
+    kout << 2 << ' ' << bin << 2 << ' ' << 23 << ' ' << dec << 23 << '\n';
+
+    for (int i = 0; i < 14; ++i)
+    {
+        if (kout.get_buffer_at(i) != TEST_RESULT3[i])
+        {
+            cga.print_error("appl.cc", 7);
+            return false;
+        }
+    }
+
+    kout.flush();
+
+    kout << 8 << ' ' << oct << 8 << ' ' << 23 << ' ' << dec << 23 << '\n';
+
+    for (int i = 0; i < 10; ++i)
+    {
+        if (kout.get_buffer_at(i) != TEST_RESULT4[i])
+        {
+            cga.print_error("appl.cc", 7);
+            return false;
+        }
+    }
+
+    kout.flush();
+
+    kout << 10 << ' ' << hex << 10 << ' ' << 177 << ' ' << dec << 177 << '\n';
+
+    for (int i = 0; i < 12; ++i)
+    {
+        if (kout.get_buffer_at(i) != TEST_RESULT5[i])
+        {
+            cga.print_error("appl.cc", 7);
             return false;
         }
     }
@@ -113,13 +196,35 @@ bool Application::test_cga_stream()
 
     return true;    
 }
-         
-void Application::action () {}
+      
+bool Application::test_keyboard() 
+{
+    Keyboard_Controller keyboard;
+
+    keyboard.set_led(4, true);
+
+    /*
+    unsigned char a = keyboard.key_hit().asc;
+    if (a == 'a')
+    {
+        kout << a;
+        kout.flush();
+    }
+    */
+
+    return true;
+}
+
+void Application::action() 
+{
+
+}
 
 bool Application::test()
 {
     bool screen = test_cga_screen();
     bool ostream = test_o_stream();
     bool cgastream = test_cga_stream();
-    return screen && ostream && cgastream;
+    bool keyboard = test_keyboard();
+    return screen && ostream && cgastream && keyboard;
 }

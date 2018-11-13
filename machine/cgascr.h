@@ -34,7 +34,7 @@ public:
      *  1. color = background
      *  2. color = foreground
      */
-    enum Attributes : char {
+    enum Attributes : unsigned char { // TODO
         white_black = 0x0f,
         black_white = 0xf0
     };
@@ -50,6 +50,8 @@ public:
    void print(char *text, int length, unsigned char attrib=char(black_white));
 
    char get_char(int x, int y);
+
+   void print_error(char *filename, int length);
 
 };
 

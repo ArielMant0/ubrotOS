@@ -106,3 +106,10 @@ char CGA_Screen::get_char(int x, int y)
   char *pos = (char*)(CGA_START + 2*(x+y*MAX_X));
   return *pos;
 }
+
+void CGA_Screen::print_error(char *filename, int length)
+{
+  setpos(0, 24);
+  print("Error in: ", 10, 0x40);
+  print(filename, length, 0x40);
+}
