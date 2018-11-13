@@ -201,6 +201,7 @@ bool Application::test_keyboard()
 {
     Keyboard_Controller keyboard;
 
+    // capslock = 4, numlock = 2, scrolllock = 1
     keyboard.set_led(4, true);
 
     /*

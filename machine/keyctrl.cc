@@ -350,7 +350,7 @@ void Keyboard_Controller::set_led (char led, bool on)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
+    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);
     // Write data byte to data port
     data_port.outb(led & (on ? led : char(0)));
     // Wait for acknowledgement
@@ -358,5 +358,5 @@ void Keyboard_Controller::set_led (char led, bool on)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);     
+    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);     
 }
