@@ -33,7 +33,10 @@ void CGA_Screen::setpos(int x, int y)
 
 void CGA_Screen::set_cursor()
 {
-    int pos = (int)(CGA_START + 2*(m_x + m_y*MAX_X));
+    int x,y;
+    calc_next_pos(m_x+1,m_y, x, y);
+
+    int pos = (int)(CGA_START + 2*(x + y*MAX_X));
     index.outb(14); // high
     data.outb(pos >> 8);
     index.outb(15); // low
