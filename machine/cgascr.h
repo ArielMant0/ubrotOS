@@ -24,8 +24,11 @@ private:
    void scroll_down();
 
    void calc_next_pos(int x, int y, int &x_to, int &y_to);
+
+   void set_cursor();
    
    int m_x, m_y;
+   IO_Port index, data;
 
 public:
 
@@ -39,7 +42,7 @@ public:
         black_white = 0xf0
     };
 
-   CGA_Screen() : m_x(0), m_y(0) {}
+    CGA_Screen() : m_x(0), m_y(0), index(0x3d4), data(0x3d5) {}
 
    void show(int x, int y, char c, unsigned char attrib=char(black_white));
 
