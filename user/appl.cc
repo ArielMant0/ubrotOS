@@ -209,9 +209,16 @@ bool Application::test_keyboard()
     }*/
 
     
-    Key key = keyboard.key_hit();
-    kout << key.ascii();
-    kout.flush();
+    Key key;
+    while(true)
+    {
+        key = keyboard.key_hit();
+        if (key.valid())
+        {
+            kout << key.ascii();
+            kout.flush();
+        }
+    }
 
     return true;
 }
