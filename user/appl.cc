@@ -199,6 +199,8 @@ bool Application::test_cga_stream()
       
 bool Application::test_keyboard() 
 {
+    kout << 'i' << 'n' << ' ' << 't' << 'e' << 's' << 't' << endl;
+
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
@@ -207,7 +209,6 @@ bool Application::test_keyboard()
         if (i % 1000 == 0)
             keyboard.set_led(4, true);
     }*/
-
     
     Key key;
     for(int i = 0;; ++i)
@@ -217,7 +218,7 @@ bool Application::test_keyboard()
         kout.flush();
         if (key.valid())
         {
-            kout << ' ' << key.ascii();
+            kout << '-' << '>' << key.ascii();
             kout.flush();
         }
     }
