@@ -330,7 +330,7 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);
+    } while (status == 0x02 && /*status != kbd_reply::ack &&*/ counter++ < MAX_WAIT);
     // Write data byte to data port
     data_port.outb((delay << 4) & speed);
     counter = 0;
