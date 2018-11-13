@@ -210,12 +210,12 @@ bool Application::test_keyboard()
 
     
     Key key;
-    while(true)
+    for(int i = 0;; ++i)
     {
         key = keyboard.key_hit();
         if (key.valid())
         {
-            kout << key.ascii();
+            kout << i << ' ' << key.ascii();
             kout.flush();
         }
     }
