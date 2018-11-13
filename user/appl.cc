@@ -213,9 +213,11 @@ bool Application::test_keyboard()
     for(int i = 0;; ++i)
     {
         key = keyboard.key_hit();
+        kout << i;
+        kout.flush();
         if (key.valid())
         {
-            kout << i << ' ' << key.ascii();
+            kout << ' ' << key.ascii();
             kout.flush();
         }
     }
