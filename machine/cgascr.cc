@@ -34,9 +34,10 @@ void CGA_Screen::setpos(int x, int y)
 void CGA_Screen::set_cursor()
 {
     int x,y;
-    calc_next_pos(m_x+1,m_y, x, y);
+    calc_next_pos(m_x+1, m_y, x, y, false);
 
-    int pos = (int)(CGA_START + 2*(x + y*MAX_X));
+    // int pos = (int)(CGA_START + 2*(x + y*MAX_X));
+    int pos = 0;
     index.outb(14); // high
     data.outb(pos >> 8);
     index.outb(15); // low
@@ -70,7 +71,7 @@ void CGA_Screen::print(char *text, int length, unsigned char attrib)
   setpos(x, y);
 }
 
-void CGA_Screen::calc_next_pos(int x, int y, int &x_to, int &y_to)
+void CGA_Screen::calc_next_pos(int x, int y, int &x_to, int &y_to, bool scroll)
 {
   if (x < 0 || y < 0)
   {
@@ -82,14 +83,15 @@ void CGA_Screen::calc_next_pos(int x, int y, int &x_to, int &y_to)
   // -> scroll down (y)
   if (x >= MAX_X)
   {
-    show(1, 0, 'F', 0xf0); // TODO
     calc_next_pos(0, y+1, x_to, y_to);
     return;
   }
   else if (y >= MAX_Y)
   {
-    scroll_down();
-    show(3, 0, 'F', 0xf0); // TODO
+    if (scroll)
+    {
+        scroll_down();
+    }
     y_to = y - 1;
     x_to = x;
   }

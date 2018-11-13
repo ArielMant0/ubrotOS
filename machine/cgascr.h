@@ -23,7 +23,7 @@ private:
 
    void scroll_down();
 
-   void calc_next_pos(int x, int y, int &x_to, int &y_to);
+   void calc_next_pos(int x, int y, int &x_to, int &y_to, bool scroll=true);
 
    void set_cursor();
    
