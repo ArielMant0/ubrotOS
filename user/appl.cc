@@ -203,6 +203,8 @@ bool Application::test_keyboard()
 
     Keyboard_Controller keyboard;
 
+    kout << 'k' << 'e' << 'y' << 1 << endl;
+
     // capslock = 4, numlock = 2, scrolllock = 1
     /*for (int i = 0; i < 10000; i++)
     {
@@ -211,16 +213,18 @@ bool Application::test_keyboard()
     }*/
     
     Key key;
+
+    kout << 'k' << 'e' << 'y' << 2 << endl;
+
     for(int i = 0;; ++i)
     {
         key = keyboard.key_hit();
-        kout << i;
-        kout.flush();
+        kout << 'i' << '=' << i;
         if (key.valid())
         {
-            kout << '-' << '>' << key.ascii();
-            kout.flush();
+            kout << ' ' << '-' << '>' << ' ' << key.ascii();
         }
+        kout << endl;
     }
 
     return true;
