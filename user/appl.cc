@@ -202,20 +202,16 @@ bool Application::test_keyboard()
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
-    for (int i = 0; i < 10000; i++)
+    /*for (int i = 0; i < 10000; i++)
     {
         if (i % 1000 == 0)
             keyboard.set_led(4, true);
-    }
+    }*/
 
-    /*
-    unsigned char a = keyboard.key_hit().asc;
-    if (a == 'a')
-    {
-        kout << a;
-        kout.flush();
-    }
-    */
+    
+    Key key = keyboard.key_hit();
+    kout << key.ascii();
+    kout.flush();
 
     return true;
 }
@@ -227,9 +223,9 @@ void Application::action()
 
 bool Application::test()
 {
-    bool screen = test_cga_screen();
-    bool ostream = test_o_stream();
-    bool cgastream = test_cga_stream();
+    bool screen = true;//test_cga_screen();
+    bool ostream = true;//test_o_stream();
+    bool cgastream = true;//test_cga_stream();
     bool keyboard = test_keyboard();
     return screen && ostream && cgastream && keyboard;
 }
