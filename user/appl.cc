@@ -199,32 +199,20 @@ bool Application::test_cga_stream()
       
 bool Application::test_keyboard() 
 {
-    kout << 'i' << 'n' << ' ' << 't' << 'e' << 's' << 't' << endl;
-
     Keyboard_Controller keyboard;
 
-    kout << 'k' << 'e' << 'y' << 1 << endl;
-
     // capslock = 4, numlock = 2, scrolllock = 1
-    /*for (int i = 0; i < 10000; i++)
-    {
-        if (i % 1000 == 0)
-            keyboard.set_led(4, true);
-    }*/
+    keyboard.set_led(4, true);
     
     Key key;
-
-    kout << 'k' << 'e' << 'y' << 2 << endl;
-
     for(int i = 0;; ++i)
     {
         key = keyboard.key_hit();
-        kout << 'i' << '=' << i;
         if (key.valid())
         {
-            kout << ' ' << '-' << '>' << ' ' << key.ascii();
+            kout << key.ascii();
+            kout.flush();
         }
-        kout << endl;
     }
 
     return true;

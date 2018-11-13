@@ -255,12 +255,12 @@ Keyboard_Controller::Keyboard_Controller () :
    ctrl_port (0x64), data_port (0x60)
  {
    // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
-//    set_led (led::caps_lock, false);
-//    set_led (led::scroll_lock, false);
-//    set_led (led::num_lock, false);
+    set_led (led::caps_lock, false);
+    set_led (led::scroll_lock, false);
+    set_led (led::num_lock, false);
 
-   // maximale Geschwindigkeit, minimale Verzoegerung
-//    set_repeat_rate (0, 0);  
+    // maximale Geschwindigkeit, minimale Verzoegerung
+    set_repeat_rate (0, 0);  
  }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-
@@ -338,7 +338,7 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);
+    } while (status == 0x02 && /*status != kbd_reply::ack &&*/ counter++ < MAX_WAIT);
 }
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
@@ -352,14 +352,14 @@ void Keyboard_Controller::set_led (char led, bool on)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
+    } while (status == 0x02 && counter++ < MAX_WAIT);
     // Write data byte to data port
-    leds = on ? leds | led : leds ^ led;
+    leds = on ? leds | led : leds & (led ^ 1);
     data_port.outb(leds);
     // Wait for acknowledgement
     counter = 0;
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);     
+    } while (status == 0x02 /*&& data_port.inb() != kbd_reply::ack*/ && counter++ < MAX_WAIT);     
 }
