@@ -12,7 +12,7 @@
 
 #include "machine/keyctrl.h"
 
-#define MAX_WAIT 1000
+#define MAX_WAIT 50000
  
 /* STATIC MEMERS */
 

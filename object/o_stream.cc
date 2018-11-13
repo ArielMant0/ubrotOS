@@ -89,9 +89,17 @@ void O_Stream::calc_num(long number)
 	//int divisor;
 
 	if (number < 0) {
-		//number = (number ^ 1) + 1; // 2s complement
-		number*=-1;
-		putc('-');
+		switch (m_mode)
+		{
+			case Mode::BIN:
+				number = (number ^ 1) + 1; // 2s complement
+				break;
+			case Mode::DEC:
+				number*=-1;
+				putc('-');
+				break;
+			default: break;
+		}
 	}
 	calc_num((unsigned long)(number));
 }
