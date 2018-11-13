@@ -260,7 +260,7 @@ Keyboard_Controller::Keyboard_Controller () :
     set_led (led::num_lock, false);
 
     // maximale Geschwindigkeit, minimale Verzoegerung
-    set_repeat_rate (0, 0);  
+    set_repeat_rate (10, 3);  
  }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-

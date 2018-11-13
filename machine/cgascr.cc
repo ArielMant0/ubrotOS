@@ -99,6 +99,10 @@ void CGA_Screen::scroll_down()
       show(i, j-1, *pos, *(pos+1));
     }
   }
+  for (int i = 0; i < MAX_X; i++)
+  {
+    show(i, MAX_Y-1, ' ');
+  }
 }
 
 char CGA_Screen::get_char(int x, int y)
