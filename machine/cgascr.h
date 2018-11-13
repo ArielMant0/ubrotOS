@@ -34,12 +34,12 @@ public:
 
     /**
      * Enum that specifies all color attributes for the screen
-     *  1. color = background
-     *  2. color = foreground
+     *  1. color = foreground
+     *  2. color = background
      */
     enum Attributes : unsigned char { // TODO
         white_black = 0x0f,
-        black_white = 0xf0
+        black_white = 0x10 //0xf0
     };
 
     CGA_Screen() : m_x(0), m_y(0), index(0x3d4), data(0x3d5) {}
