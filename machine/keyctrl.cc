@@ -255,12 +255,12 @@ Keyboard_Controller::Keyboard_Controller () :
    ctrl_port (0x64), data_port (0x60)
  {
    // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
-   set_led (led::caps_lock, false);
-   set_led (led::scroll_lock, false);
-   set_led (led::num_lock, false);
+//    set_led (led::caps_lock, false);
+//    set_led (led::scroll_lock, false);
+//    set_led (led::num_lock, false);
 
    // maximale Geschwindigkeit, minimale Verzoegerung
-   set_repeat_rate (0, 0);  
+//    set_repeat_rate (0, 0);  
  }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-
