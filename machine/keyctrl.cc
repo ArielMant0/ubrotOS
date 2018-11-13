@@ -286,9 +286,11 @@ Key Keyboard_Controller::key_hit ()
     {
         return invalid;
     }
-    get_ascii_code();
 
-    return gather;
+    invalid.ascii(gather.ascii());
+    invalid.scancode(gather.scancode());
+    
+    return invalid;
 }
 
 // REBOOT: Fuehrt einen Neustart des Rechners durch. Ja, beim PC macht
@@ -328,7 +330,7 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
+    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);
     // Write data byte to data port
     data_port.outb((delay << 4) & speed);
     counter = 0;
@@ -336,7 +338,7 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
+    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);
 }
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
@@ -350,13 +352,14 @@ void Keyboard_Controller::set_led (char led, bool on)
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);
+    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);
     // Write data byte to data port
-    data_port.outb(led & (on ? led : char(0)));
+    leds = on ? leds | led : leds ^ led;
+    data_port.outb(leds);
     // Wait for acknowledgement
     counter = 0;
     do
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 || status != kbd_reply::ack || counter++ < MAX_WAIT);     
+    } while (status == 0x02 && status != kbd_reply::ack && counter++ < MAX_WAIT);     
 }

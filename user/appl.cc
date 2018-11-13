@@ -202,7 +202,11 @@ bool Application::test_keyboard()
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
-    keyboard.set_led(4, true);
+    for (int i = 0; i < 10000; i++)
+    {
+        if (i % 1000 == 0)
+            keyboard.set_led(4, true);
+    }
 
     /*
     unsigned char a = keyboard.key_hit().asc;
