@@ -258,12 +258,12 @@ Keyboard_Controller::Keyboard_Controller () :
    ctrl_port (0x64), data_port (0x60)
  {
    // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
-    set_led (led::caps_lock, false);
-    set_led (led::scroll_lock, false);
-    set_led (led::num_lock, false);
+    set_led (led::caps_lock, true);
+    set_led (led::scroll_lock, true);
+    set_led (led::num_lock, true);
 
     // maximale Geschwindigkeit, minimale Verzoegerung
-    set_repeat_rate (0x14, 0x03);
+    set_repeat_rate (31, 3);
  }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-
@@ -281,7 +281,7 @@ Key Keyboard_Controller::key_hit ()
     while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-        if ((status & 0x01) == 0x01)
+        if ((status & outb) == outb)
         {
             break;
         }
@@ -349,30 +349,33 @@ void Keyboard_Controller::set_led (char led, bool on)
  
 }
 
-void Keyboard_Controller::write_command(int cmd)
+void Keyboard_Controller::write_command(int cmd, bool ctrl)
 {
     int status, counter = 0;
     // Wait till we can write a command
     while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-        if ((status & 0x02) == 0x00)
+        if ((status & inpb) == 0)
         {
-            //kout << 's' << 'u' << 'c' << ' ' << counter << endl;
+            //kout << "success " << counter << endl;
             break;
         }
     }
-    // Set command byte in data port
-    data_port.outb(cmd);
+    // Set command byte
+    if (ctrl)
+        ctrl_port.outb(cmd);
+    else
+        data_port.outb(cmd);
 
     counter = 0;
     // Wait for acknowledgement of command
     while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-        if ((status & 0x01) == 0x01)
+        if ((status & outb) == outb)
         {
-            //kout << 's' << 'u' << 'c' << ' ' << counter << endl;
+            //kout << "success " << counter << endl;
             break;
         }
     }
