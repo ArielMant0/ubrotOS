@@ -226,7 +226,8 @@ bool Application::test_keyboard()
             {
                 cga.clear();
                 kout.flush();
-                test_cga_screen();
+                kout << 'a' << endl;
+                //test_cga_screen();
             }
             else if (key.ascii() == '2')
             {
