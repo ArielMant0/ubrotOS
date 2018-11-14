@@ -131,6 +131,12 @@ void O_Stream::calc_num(unsigned long number)
 	int length = 0;
 	int divisor;
 
+	if (number == 0)
+	{
+		putc('0');
+		return;
+	}
+
 	switch (m_mode)
 	{
 		case Mode::BIN:

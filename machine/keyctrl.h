@@ -70,6 +70,9 @@ private:
     // GET_ASCII_CODE: ermittelt anhand von Tabellen aus dem Scancode und
     //                 den gesetzten Modifier-Bits den ASCII Code der Taste.
     void get_ascii_code ();
+
+    void write_command(int cmd);
+    
 public:
 
    // KEYBOARD_CONTROLLER: Initialisierung der Tastatur: alle LEDs werden

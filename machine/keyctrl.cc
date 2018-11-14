@@ -13,7 +13,7 @@
 #include "machine/keyctrl.h"
 #include "device/cgastr.h"
 
-#define MAX_WAIT 10000
+#define MAX_WAIT 250000
 
 extern CGA_Stream kout;
  
@@ -258,12 +258,12 @@ Keyboard_Controller::Keyboard_Controller () :
    ctrl_port (0x64), data_port (0x60)
  {
    // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
-    set_led (led::caps_lock, false);
-    set_led (led::scroll_lock, false);
-    set_led (led::num_lock, false);
+    //set_led (led::caps_lock, false);
+    //set_led (led::scroll_lock, false);
+    //set_led (led::num_lock, false);
 
     // maximale Geschwindigkeit, minimale Verzoegerung
-    set_repeat_rate (20, 3);  
+    set_repeat_rate (31, 0x03);
  }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-
@@ -278,20 +278,28 @@ Key Keyboard_Controller::key_hit ()
     Key invalid;  // nicht explizit initialisierte Tasten sind ungueltig
     int status, counter = 0;
     // Wait for key input
-    do
+    while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-    } while (status != 0x01 && counter++ < MAX_WAIT);
+        if ((status & 0x01) == 0x01)
+        {
+            break;
+        }
+    }
     // Read code
     code = data_port.inb();
     // Decode scan code
     if (!key_decoded())
     {
+        code = 0;
         return invalid;
     }
 
     invalid.ascii(gather.ascii());
     invalid.scancode(gather.scancode());
+
+    gather.invalidate();
+    code = 0;
     
     return invalid;
 }
@@ -326,56 +334,48 @@ void Keyboard_Controller::reboot ()
 void Keyboard_Controller::set_repeat_rate (int speed, int delay)
 {
     // TODO: error handling for wrong values
-    int status, counter = 0;
-    // Wait for acknowledgement
-    while (counter++ < MAX_WAIT)
-    {
-        status = ctrl_port.inb();
-        if ((status & 0x02) == 0x02)
-          break;
-    }
-    // Set command byte in data port
-    data_port.outb(kbd_cmd::set_speed);
-
-    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}
-    // Write data byte to data port
-    data_port.outb((delay << 4) & speed);
-    counter = 0;
-    // Wait for acknowledgement
-    while (counter++ < MAX_WAIT)
-    {
-        status = ctrl_port.inb();
-        if ((status & 0x02) == 0x02)
-          break;
-    }
-    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}
+    write_command(kbd_cmd::set_speed);
+    write_command((delay << 5) | speed);
 }
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
 void Keyboard_Controller::set_led (char led, bool on)
 {
     // TODO: error handling for wrong values
-    int status, counter = 0;
-    // Set command byte in data port
-    data_port.outb(kbd_cmd::set_led);
-    // Wait for acknowledgement
-    while (counter++ < MAX_WAIT)
-    {
-        status = ctrl_port.inb();
-        if ((status & 0x02) == 0x02)
-          break;
-    }
-    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}
+    write_command(kbd_cmd::set_led);
+    leds = on ? leds | led : leds ^ led;
     // Write data byte to data port
-    leds = on ? leds | led : leds & (led ^ 1);
-    data_port.outb(leds);
-    // Wait for acknowledgement
-    counter = 0;
+    write_command(leds);
+ 
+}
+
+void Keyboard_Controller::write_command(int cmd)
+{
+    int status, counter = 0;
+    // Wait till we can write a command
     while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-        if ((status & 0x02) == 0x02)
-          break;
+        if ((status & 0x02) == 0x00)
+        {
+            kout << 's' << 'u' << 'c' << ' ' << counter << endl;
+            break;
+        }
     }
-    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}  
+    // Set command byte in data port
+    data_port.outb(cmd);
+
+    counter = 0;
+    // Wait for acknowledgement of command
+    while (counter++ < MAX_WAIT)
+    {
+        status = ctrl_port.inb();
+        if ((status & 0x01) == 0x01)
+        {
+            kout << 's' << 'u' << 'c' << ' ' << counter << endl;
+            break;
+        }
+    }
+    // Read ACK data byte
+    data_port.inb();
 }
