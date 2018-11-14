@@ -26,6 +26,8 @@ private:
    void calc_next_pos(int x, int y, int &x_to, int &y_to, bool scroll=true);
 
    void set_cursor();
+
+   void read_cursor();
    
    int m_x, m_y;
    IO_Port index, data;
@@ -52,8 +54,7 @@ public:
         white
     };
 
-
-    CGA_Screen() : m_x(0), m_y(0), index(0x3d4), data(0x3d5) {}
+    CGA_Screen();
 
    void show(int x, int y, char c, unsigned char attrib=char(Color::white));
 
