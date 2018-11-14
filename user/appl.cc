@@ -206,13 +206,13 @@ bool Application::test_keyboard()
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
-    for (int i = 0; i < 10000; ++i)
+    for (int i = 0; false && i < 10000; ++i)
     {
         int tmp = i < 1000 ? i : i % 1000;
         if (tmp == 0)
             keyboard.set_led(4, true);
     }
-    
+
     Key key;
     for(int i = 0;; ++i)
     {
@@ -270,5 +270,6 @@ void Application::action()
 
 bool Application::test()
 {
+    kout << endl;
     return test_keyboard();
 }

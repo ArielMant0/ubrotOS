@@ -258,9 +258,9 @@ Keyboard_Controller::Keyboard_Controller () :
    ctrl_port (0x64), data_port (0x60)
  {
    // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
-    set_led (led::caps_lock, true);
-    set_led (led::scroll_lock, true);
-    set_led (led::num_lock, true);
+    //set_led (led::caps_lock, true);
+    //set_led (led::scroll_lock, true);
+    //set_led (led::num_lock, true);
 
     // maximale Geschwindigkeit, minimale Verzoegerung
     set_repeat_rate (31, 3);
@@ -358,7 +358,7 @@ void Keyboard_Controller::write_command(int cmd, bool ctrl)
         status = ctrl_port.inb();
         if ((status & inpb) == 0)
         {
-            //kout << "success " << counter << endl;
+            kout << "success 1 " << counter << endl;
             break;
         }
     }
@@ -375,10 +375,11 @@ void Keyboard_Controller::write_command(int cmd, bool ctrl)
         status = ctrl_port.inb();
         if ((status & outb) == outb)
         {
-            //kout << "success " << counter << endl;
+            kout << "success 2 " << counter << endl;
             break;
         }
     }
     // Read ACK data byte
-    data_port.inb();
+    kout << data_port.inb() << endl;
+    //data_port.inb();
 }
