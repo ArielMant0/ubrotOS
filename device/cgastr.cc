@@ -13,6 +13,8 @@
 
 #include "device/cgastr.h"
 
+CGA_Stream kout;
+
 CGA_Screen cga_screen;
 
 CGA_Stream::CGA_Stream() : O_Stream() {}

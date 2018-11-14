@@ -17,8 +17,6 @@
 #include "object/o_stream.h"
 #include "machine/cgascr.h"
 
-//CGA_Stream kout; // TODO
-
 class CGA_Stream : public O_Stream
 {
 public:

@@ -171,13 +171,13 @@ bootdisk: $(OBJDIR)/bootdisk.iso
 # 'qemu' ruft den qemu-Emulator mit dem System auf.
 
 qemu: $(OBJDIR)/bootdisk.iso
-	$(QEMU) -drive file=build/bootdisk.iso,format=raw -k en-us
+	$(QEMU) -drive file=build/bootdisk.iso,format=raw -k de
 
 # --------------------------------------------------------------------------
 # 'qemu-smp' ruft den qemu-Emulator mit SMP-Support und 2 CPUs mit dem System auf.
 
 qemu-smp: $(OBJDIR)/bootdisk.iso
-	$(QEMU) -drive file=build/bootdisk.iso,format=raw -k en-us -smp 2
+	$(QEMU) -drive file=build/bootdisk.iso,format=raw -k de -smp 2
 
 # --------------------------------------------------------------------------
 # 'qemu-gdb' ruft den qemu-Emulator mit aktiviertem GDB-Stub mit dem System

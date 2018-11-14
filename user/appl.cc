@@ -16,7 +16,7 @@
          
 /* GLOBALE VARIABLEN */
 
-/*extern */CGA_Stream kout; // TODO
+extern CGA_Stream kout; // TODO
 
 const char TEST_RESULT1[] = { 's', '1', 'g', '-', '4', '8', '7', '\n' };
 const char TEST_RESULT2[] = 
@@ -155,7 +155,7 @@ bool Application::test_cga_stream()
         }
     }
 
-    kout << 2 << ' ' << bin << 2 << ' ' << 23 << ' ' << dec << 23 << '\n';
+    kout << 2 << ' ' << bin << 2 << ' ' << -23 << ' ' << dec << -23 << '\n';
 
     for (int i = 0; i < 14; ++i)
     {
@@ -168,7 +168,7 @@ bool Application::test_cga_stream()
 
     kout.flush();
 
-    kout << 8 << ' ' << oct << 8 << ' ' << 23 << ' ' << dec << 23 << '\n';
+    kout << 8 << ' ' << oct << 8 << ' ' << -23 << ' ' << dec << -23 << '\n';
 
     for (int i = 0; i < 10; ++i)
     {
@@ -181,7 +181,7 @@ bool Application::test_cga_stream()
 
     kout.flush();
 
-    kout << 10 << ' ' << hex << 10 << ' ' << 177 << ' ' << dec << 177 << '\n';
+    kout << 10 << ' ' << hex << 10 << ' ' << -177 << ' ' << dec << -177 << '\n';
 
     for (int i = 0; i < 12; ++i)
     {
@@ -202,7 +202,14 @@ bool Application::test_keyboard()
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
-    keyboard.set_led(4, true);
+    for (int i = 0; false && i < 10000; ++i)
+    {
+        int tmp = i < 1000 ? i : i % 1000;
+        if (tmp == 0)
+            keyboard.set_led(4, true);
+        else if (tmp == 1)
+            keyboard.set_led(4, false);
+    }
     
     Key key;
     for(int i = 0;; ++i)
@@ -225,9 +232,5 @@ void Application::action()
 
 bool Application::test()
 {
-    bool screen = true;//test_cga_screen();
-    bool ostream = true;//test_o_stream();
-    bool cgastream = true;//test_cga_stream();
-    bool keyboard = test_keyboard();
-    return screen && ostream && cgastream && keyboard;
+    return test_cga_screen() && test_o_stream() && test_cga_stream() && test_keyboard();
 }

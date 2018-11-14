@@ -32,25 +32,36 @@ private:
 
 public:
 
-    /**
-     * Enum that specifies all color attributes for the screen
-     *  1. color = foreground
-     *  2. color = background
-     */
-    enum Attributes : unsigned char { // TODO
-        white_black = 0x0f,
-        black_white = 0x10 //0xf0
+    // high bits: background, low bits: foreground
+    enum Color : unsigned char {
+        black = 0x00,
+        blue,
+        green,
+        cyan,
+        red,
+        magenta,
+        brown,
+        light_gray,
+        dark_grey,
+        light_blue,
+        light_green,
+        light_cyan,
+        light_red,
+        light_magenta,
+        yellow,
+        white
     };
+
 
     CGA_Screen() : m_x(0), m_y(0), index(0x3d4), data(0x3d5) {}
 
-   void show(int x, int y, char c, unsigned char attrib=char(black_white));
+   void show(int x, int y, char c, unsigned char attrib=char(Color::white));
 
    void setpos(int x, int y);
 
    void getpos(int &x, int &y);
 
-   void print(char *text, int length, unsigned char attrib=char(black_white));
+   void print(char *text, int length, unsigned char attrib=char(Color::white));
 
    char get_char(int x, int y);
 

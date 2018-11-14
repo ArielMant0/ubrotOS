@@ -72,6 +72,16 @@ O_Stream& O_Stream::operator<<(long number)
 	return *this;
 }
 
+O_Stream& O_Stream::operator<<(void *pointer)
+{
+    return operator<<((long)pointer);
+}
+
+O_Stream& O_Stream::operator<<(char *text)
+{
+	return operator<<((void*)text);
+}
+
 O_Stream& O_Stream::operator<<(O_Stream& (*fkt) (O_Stream&))
 {
 	return fkt(*this);
@@ -84,13 +94,11 @@ char O_Stream::get_buffer_at(unsigned int i)
 
 void O_Stream::calc_num(long number)
 {
-	//char tmp[64]; TODO
-	//int length = 0;
-	//int divisor;
-
 	if (number < 0) {
 		switch (m_mode)
 		{
+			case Mode::HEX:
+			case Mode::OCT:
 			case Mode::BIN:
 				number = (number ^ 1) + 1; // 2s complement
 				break;
@@ -106,7 +114,7 @@ void O_Stream::calc_num(long number)
 
 void O_Stream::calc_num(unsigned long number)
 {
-	char tmp2[64];
+	char num[64];
 	int length = 0;
 	int divisor;
 
@@ -120,7 +128,7 @@ void O_Stream::calc_num(unsigned long number)
 			{
 				long tmp = (number % 16);
 				number = number / 16;
-				tmp2[i] = tmp < 10 ? tmp : (tmp + 7); // wrong way around
+				num[i] = tmp < 10 ? tmp : (tmp + 7); // wrong way around
 			}
 			break;
 		case Mode::OCT:
@@ -131,12 +139,12 @@ void O_Stream::calc_num(unsigned long number)
 
 	for (int i = 0; m_mode != Mode::HEX && number > 0; ++i, ++length)
 	{
-		tmp2[i] = (number % divisor); // wrong way around
+		num[i] = (number % divisor); // wrong way around
 		number = number / divisor;
 	}
 	for (int i = 1; i <= length; ++i)
 	{
-		putc((tmp2[length-i] + '0')); // right way around
+		putc((num[length-i] + '0')); // right way around
 	}
 }
 

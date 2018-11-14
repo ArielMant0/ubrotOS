@@ -11,8 +11,11 @@
 /* INCLUDES */
 
 #include "machine/keyctrl.h"
+#include "device/cgastr.h"
 
-#define MAX_WAIT 50000
+#define MAX_WAIT 10000
+
+extern CGA_Stream kout;
  
 /* STATIC MEMERS */
 
@@ -260,7 +263,7 @@ Keyboard_Controller::Keyboard_Controller () :
     set_led (led::num_lock, false);
 
     // maximale Geschwindigkeit, minimale Verzoegerung
-    set_repeat_rate (31, 3);  
+    set_repeat_rate (20, 3);  
  }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-
@@ -324,21 +327,28 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
 {
     // TODO: error handling for wrong values
     int status, counter = 0;
-    // Set command byte in data port
-    data_port.outb(kbd_cmd::set_speed);
     // Wait for acknowledgement
-    do
+    while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && /*status != kbd_reply::ack &&*/ counter++ < MAX_WAIT);
+        if ((status & 0x02) == 0x02)
+          break;
+    }
+    // Set command byte in data port
+    data_port.outb(kbd_cmd::set_speed);
+
+    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}
     // Write data byte to data port
     data_port.outb((delay << 4) & speed);
     counter = 0;
     // Wait for acknowledgement
-    do
+    while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && /*status != kbd_reply::ack &&*/ counter++ < MAX_WAIT);
+        if ((status & 0x02) == 0x02)
+          break;
+    }
+    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}
 }
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
@@ -349,17 +359,23 @@ void Keyboard_Controller::set_led (char led, bool on)
     // Set command byte in data port
     data_port.outb(kbd_cmd::set_led);
     // Wait for acknowledgement
-    do
+    while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 && counter++ < MAX_WAIT);
+        if ((status & 0x02) == 0x02)
+          break;
+    }
+    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}
     // Write data byte to data port
     leds = on ? leds | led : leds & (led ^ 1);
     data_port.outb(leds);
     // Wait for acknowledgement
     counter = 0;
-    do
+    while (counter++ < MAX_WAIT)
     {
         status = ctrl_port.inb();
-    } while (status == 0x02 /*&& data_port.inb() != kbd_reply::ack*/ && counter++ < MAX_WAIT);     
+        if ((status & 0x02) == 0x02)
+          break;
+    }
+    for (int i = 0; i < MAX_WAIT && data_port.inb() != kbd_reply::ack; i++) {}  
 }
