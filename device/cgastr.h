@@ -25,6 +25,8 @@ public:
 
       void flush() override;
 
+      CGA_Screen& screen();
+
 private:
 
       CGA_Stream(CGA_Stream &copy); // Verhindere Kopieren

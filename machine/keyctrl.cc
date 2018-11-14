@@ -258,12 +258,12 @@ Keyboard_Controller::Keyboard_Controller () :
    ctrl_port (0x64), data_port (0x60)
  {
    // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
-    //set_led (led::caps_lock, false);
-    //set_led (led::scroll_lock, false);
-    //set_led (led::num_lock, false);
+    set_led (led::caps_lock, false);
+    set_led (led::scroll_lock, false);
+    set_led (led::num_lock, false);
 
     // maximale Geschwindigkeit, minimale Verzoegerung
-    set_repeat_rate (31, 0x03);
+    set_repeat_rate (0x14, 0x03);
  }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-
@@ -343,7 +343,7 @@ void Keyboard_Controller::set_led (char led, bool on)
 {
     // TODO: error handling for wrong values
     write_command(kbd_cmd::set_led);
-    leds = on ? leds | led : leds ^ led;
+    leds = on ? (leds | led) : (leds ^ led);
     // Write data byte to data port
     write_command(leds);
  
@@ -358,7 +358,7 @@ void Keyboard_Controller::write_command(int cmd)
         status = ctrl_port.inb();
         if ((status & 0x02) == 0x00)
         {
-            kout << 's' << 'u' << 'c' << ' ' << counter << endl;
+            //kout << 's' << 'u' << 'c' << ' ' << counter << endl;
             break;
         }
     }
@@ -372,7 +372,7 @@ void Keyboard_Controller::write_command(int cmd)
         status = ctrl_port.inb();
         if ((status & 0x01) == 0x01)
         {
-            kout << 's' << 'u' << 'c' << ' ' << counter << endl;
+            //kout << 's' << 'u' << 'c' << ' ' << counter << endl;
             break;
         }
     }

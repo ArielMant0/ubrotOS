@@ -24,3 +24,8 @@ void CGA_Stream::flush()
     cga_screen.print(m_buffer, m_pos);   
     O_Stream::flush();
 }
+
+CGA_Screen& CGA_Stream::screen()
+{
+	return cga_screen;
+}

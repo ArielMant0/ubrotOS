@@ -203,17 +203,15 @@ bool Application::test_cga_stream()
       
 bool Application::test_keyboard() 
 {
-    CGA_Screen cga;
+    CGA_Screen &cga = kout.screen();
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
-    for (int i = 0; false && i < 10000; ++i)
+    for (int i = 0; i < 10000; ++i)
     {
         int tmp = i < 1000 ? i : i % 1000;
         if (tmp == 0)
             keyboard.set_led(4, true);
-        else if (tmp == 1)
-            keyboard.set_led(4, false);
     }
     
     Key key;
@@ -226,15 +224,18 @@ bool Application::test_keyboard()
             {
                 cga.clear();
                 kout.flush();
-                kout << 'a' << endl;
-                //test_cga_screen();
+                test_cga_screen();
             }
             else if (key.ascii() == '2')
             {
+                cga.clear();
+                kout.flush();
                 test_o_stream();
             }
             else if (key.ascii() == '3')
             {
+                cga.clear();
+                kout.flush();
                 test_cga_stream();
             }
             else 
@@ -242,6 +243,7 @@ bool Application::test_keyboard()
                 kout << key.ascii();
                 kout.flush();
             }
+            key.invalidate();
         }
     }
 
@@ -255,5 +257,6 @@ void Application::action()
 
 bool Application::test()
 {
+    kout << endl;
     return test_cga_screen() && test_o_stream() && test_cga_stream() && test_keyboard();
 }
