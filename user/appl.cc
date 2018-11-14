@@ -124,7 +124,6 @@ bool Application::test_o_stream()
         }
     }
 
-    cga.print_error("Success", 7);
     return true;    
 }
 
@@ -238,10 +237,24 @@ bool Application::test_keyboard()
                 kout.flush();
                 test_cga_stream();
             }
-            else 
+            else if (key.ascii() == '4')
             {
-                kout << key.ascii();
+                cga.clear();
                 kout.flush();
+                
+                for(int i = 0;; ++i)
+                {
+                    if (key.ascii() == '1' || key.ascii() == '2' || key.ascii() == '3')
+                        break;
+                                
+                    key.invalidate();
+                    key = keyboard.key_hit();
+                    if (key.valid())
+                    {
+                        kout << key.ascii();
+                        kout.flush();
+                    }
+                }
             }
             key.invalidate();
         }
@@ -257,6 +270,5 @@ void Application::action()
 
 bool Application::test()
 {
-    kout << endl;
-    return test_cga_screen() && test_o_stream() && test_cga_stream() && test_keyboard();
+    return test_keyboard();
 }
