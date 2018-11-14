@@ -27,18 +27,19 @@ const char TEST_RESULT2[] =
 };
 const char TEST_RESULT3[] = 
 { 
-    '2', ' ', '1', '0', ' ', '1', '0', '1',
-    '1', '1', ' ', '2', '3', '\n'
+    '2', ' ', '1', '0', ' ', '1', '1', '1',
+    '0', '1', '0', '0', '1', ' ', '-', '2', 
+    '3', '\n'
 };
 const char TEST_RESULT4[] = 
 { 
-    '8', ' ', '1', '0', ' ', '2', '7', ' ',
-    '2', '3', '\n'
+    '8', ' ', '1', '0', ' ', '3', '5', '1',
+    ' ', '-', '2', '3', '\n'
 };
 const char TEST_RESULT5[] = 
 { 
-    '1', '0', ' ', 'A', ' ', 'B', '1', ' ', '1',
-    '7', '7', '\n'
+    '1', '0', ' ', 'A', ' ', 'E', '9', ' ', '-',
+    '2', '3', '\n'
 };
 
 bool Application::test_cga_screen()
@@ -157,7 +158,7 @@ bool Application::test_cga_stream()
 
     kout << 2 << ' ' << bin << 2 << ' ' << -23 << ' ' << dec << -23 << '\n';
 
-    for (int i = 0; i < 14; ++i)
+    for (int i = 0; i < 18; ++i)
     {
         if (kout.get_buffer_at(i) != TEST_RESULT3[i])
         {
@@ -170,7 +171,7 @@ bool Application::test_cga_stream()
 
     kout << 8 << ' ' << oct << 8 << ' ' << -23 << ' ' << dec << -23 << '\n';
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 13; ++i)
     {
         if (kout.get_buffer_at(i) != TEST_RESULT4[i])
         {
@@ -181,7 +182,7 @@ bool Application::test_cga_stream()
 
     kout.flush();
 
-    kout << 10 << ' ' << hex << 10 << ' ' << -177 << ' ' << dec << -177 << '\n';
+    kout << 10 << ' ' << hex << 10 << ' ' << -23 << ' ' << dec << -23 << '\n';
 
     for (int i = 0; i < 12; ++i)
     {

@@ -100,13 +100,26 @@ void O_Stream::calc_num(long number)
 			case Mode::HEX:
 			case Mode::OCT:
 			case Mode::BIN:
-				number = (number ^ 1) + 1; // 2s complement
+				if (number > -127)
+				{
+					number = (unsigned char) number;
+				}
+				else if (number > -32768)
+				{
+					number = (unsigned short) number;
+				}
+				else if (number > -2147483647)
+				{
+					number = (unsigned int) number;
+				}
 				break;
 			case Mode::DEC:
 				number*=-1;
 				putc('-');
 				break;
-			default: break;
+			default:
+				number*=-1;
+				break;
 		}
 	}
 	calc_num((unsigned long)(number));
