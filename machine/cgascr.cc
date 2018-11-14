@@ -18,6 +18,11 @@
 #define MAX_X 80
 #define MAX_Y 25 
 
+CGA_Screen::CGA_Screen() : index(0x3d4), data(0x3d5)
+{
+    read_cursor();
+}
+
 void CGA_Screen::show(int x, int y, char c, unsigned char attrib)
 {
   char *pos = (char*)(CGA_START + 2*(x + y*MAX_X));
@@ -38,6 +43,17 @@ void CGA_Screen::set_cursor()
     data.outb(pos >> 8);
     index.outb(15); // low
     data.outb(pos);
+}
+
+void CGA_Screen::read_cursor()
+{
+    int pos = 0;
+    index.outb(14); // high
+    pos = data.inb() << 8;
+    index.outb(15); // low
+    pos = pos | data.inb();
+    m_x = pos % MAX_X;
+    m_y = pos / MAX_X;
 }
 
 void CGA_Screen::getpos(int &x, int &y)
