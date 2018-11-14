@@ -71,7 +71,7 @@ private:
     //                 den gesetzten Modifier-Bits den ASCII Code der Taste.
     void get_ascii_code ();
 
-    void write_command(int cmd, bool ctrl=false);
+    bool write_command(int cmd);
     
 public:
 

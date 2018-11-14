@@ -334,22 +334,26 @@ void Keyboard_Controller::reboot ()
 void Keyboard_Controller::set_repeat_rate (int speed, int delay)
 {
     // TODO: error handling for wrong values
-    write_command(kbd_cmd::set_speed);
-    write_command((delay << 5) | speed);
+    if (write_command(kbd_cmd::set_speed))
+    {
+        write_command((delay << 5) | speed);
+    }
 }
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
 void Keyboard_Controller::set_led (char led, bool on)
 {
     // TODO: error handling for wrong values
-    write_command(kbd_cmd::set_led);
-    leds = on ? (leds | led) : (leds ^ led);
-    // Write data byte to data port
-    write_command(leds);
+    if (write_command(kbd_cmd::set_led))
+    {
+        leds = on ? (leds | led) : (leds ^ led);
+        // Write data byte to data port
+        write_command(leds);
+    }
  
 }
 
-void Keyboard_Controller::write_command(int cmd, bool ctrl)
+bool Keyboard_Controller::write_command(int cmd)
 {
     int status, counter = 0;
     // Wait till we can write a command
@@ -358,15 +362,11 @@ void Keyboard_Controller::write_command(int cmd, bool ctrl)
         status = ctrl_port.inb();
         if ((status & inpb) == 0)
         {
-            //kout << "success 1 " << counter << endl;
             break;
         }
     }
     // Set command byte
-    if (ctrl)
-        ctrl_port.outb(cmd);
-    else
-        data_port.outb(cmd);
+    data_port.outb(cmd);
 
     counter = 0;
     // Wait for acknowledgement of command
@@ -375,11 +375,16 @@ void Keyboard_Controller::write_command(int cmd, bool ctrl)
         status = ctrl_port.inb();
         if ((status & outb) == outb)
         {
-            //kout << "success 2 " << counter << endl;
             break;
         }
     }
     // Read ACK data byte
-    //kout << data_port.inb() << endl;
-    data_port.inb();
+    while (counter++ < MAX_WAIT)
+    {
+        if (data_port.inb() == kbd_reply::ack)
+        {
+            return true;
+        }
+    }
+    return false;
 }
