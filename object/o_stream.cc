@@ -79,7 +79,11 @@ O_Stream& O_Stream::operator<<(void *pointer)
 
 O_Stream& O_Stream::operator<<(char *text)
 {
-	return operator<<((void*)text);
+	for (int i = 0; text[i] != '\0'; i++)
+	{
+		putc(text[i]);
+	}
+	return *this;
 }
 
 O_Stream& O_Stream::operator<<(O_Stream& (*fkt) (O_Stream&))

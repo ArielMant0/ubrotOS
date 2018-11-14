@@ -68,6 +68,8 @@ public:
 
    void print_error(char *filename, int length);
 
+   void clear();
+
 };
 
 #endif

@@ -144,3 +144,16 @@ void CGA_Screen::print_error(char *filename, int length)
   print("Error in: ", 10, 0x40);
   print(filename, length, 0x40);
 }
+
+void CGA_Screen::clear()
+{
+  for (int j = 0; j < MAX_Y; ++j)
+  {
+    // for each character in the line
+    for (int i = 0; i < MAX_X; ++i)
+    {
+      show(i, j, ' ');
+    }
+  }
+  setpos(0, 0);
+}

@@ -18,28 +18,25 @@
 
 extern CGA_Stream kout; // TODO
 
-const char TEST_RESULT1[] = { 's', '1', 'g', '-', '4', '8', '7', '\n' };
+const char TEST_RESULT1[] = 
+{ 
+    "s1g-487\n"
+};
 const char TEST_RESULT2[] = 
 { 
-    '-', '1', ' ', '4', '8', '7', ' ', '-',
-    '1', '2', '3', '4', '5', '9', '8', '7', 
-    '6', ' ', '1'
+    "-1 487 -123459876 1"
 };
 const char TEST_RESULT3[] = 
 { 
-    '2', ' ', '1', '0', ' ', '1', '1', '1',
-    '0', '1', '0', '0', '1', ' ', '-', '2', 
-    '3', '\n'
+    "2 10 11101001 -23\n"
 };
 const char TEST_RESULT4[] = 
 { 
-    '8', ' ', '1', '0', ' ', '3', '5', '1',
-    ' ', '-', '2', '3', '\n'
+    "8 10 351 -23\n"
 };
 const char TEST_RESULT5[] = 
 { 
-    '1', '0', ' ', 'A', ' ', 'E', '9', ' ', '-',
-    '2', '3', '\n'
+    "10 A E9 -23\n"
 };
 
 bool Application::test_cga_screen()
@@ -47,49 +44,53 @@ bool Application::test_cga_screen()
     CGA_Screen cga; // TODO
 
     // simple write
-    cga.show(20, 0, 'a');
-    if (cga.get_char(20, 0) != 'a')
+    kout << "Test simple write command at x=20 and y=10:" << endl;
+    cga.show(40, 10, 'a');
+    if (cga.get_char(40, 10) != 'a')
     {
-    	cga.show(10, 10, '!');
+    	cga.print_error("appl.cc", 7);
     	return false;
-    }
-    else
-    {
-		cga.show(10, 10, '#');
     }
 
     int x,y;
     // check cursor pos
+    kout << "Check for cursor position:" << endl;
+
     cga.setpos(0, 10);
     cga.getpos(x, y);
     if (x != 0 || y != 10)
     {
-    	cga.show(10, 10, '!');
+    	cga.print_error("appl.cc", 7);
     	return false;
-    }
-    else
-    {
-		cga.show(10, 10, '#');
     }
 
     // newline in text
-    cga.print("Hallo 1!\n", 9);
-    cga.print("w\nw", 3);
+    kout << "Check for newlines in text:" << endl;
+
+    cga.print("Simple test text\n", 17);
+    cga.print("Simple test\ntext", 16);
 
     // wrap
+    kout << "Check if cursor is wrapped:" << endl;
+
     cga.setpos(85, 15);
     cga.getpos(x, y);
     if (x != 0 || y != 16)
     {
+        cga.print_error("appl.cc", 7);
      	return false;
     }
 
 	// more newline in text
-    cga.print("Hallo 3!\n wuhuw", 15);
-    cga.print("Hallo 3!\nwuhuw\n", 15);
+    kout << "Check for more newlines in text:" << endl;
+
+    cga.print("Simple\n test text", 17);
+    cga.print("Simple\ntest text\n", 17);
 
     // scrolling
-    for (int count = 0; false; ++count)
+    kout << "Check for scrolling function:" << endl;
+
+    for (int count = 0; count < 0; ++count)
     {
     	switch ((count/400) % 4)
     	{
@@ -123,6 +124,7 @@ bool Application::test_o_stream()
         }
     }
 
+    cga.print_error("Success", 7);
     return true;    
 }
 
@@ -156,6 +158,7 @@ bool Application::test_cga_stream()
         }
     }
 
+// TODO teste 0
     kout << 2 << ' ' << bin << 2 << ' ' << -23 << ' ' << dec << -23 << '\n';
 
     for (int i = 0; i < 18; ++i)
@@ -195,11 +198,12 @@ bool Application::test_cga_stream()
 
     kout.flush();
 
-    return true;    
+    return true;
 }
       
 bool Application::test_keyboard() 
 {
+    CGA_Screen cga;
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
@@ -218,8 +222,26 @@ bool Application::test_keyboard()
         key = keyboard.key_hit();
         if (key.valid())
         {
-            kout << key.ascii();
-            kout.flush();
+            if (key.ascii() == '1')
+            {
+                cga.clear();
+                kout.flush();
+                kout << 'a' << endl;
+                //test_cga_screen();
+            }
+            else if (key.ascii() == '2')
+            {
+                test_o_stream();
+            }
+            else if (key.ascii() == '3')
+            {
+                test_cga_stream();
+            }
+            else 
+            {
+                kout << key.ascii();
+                kout.flush();
+            }
         }
     }
 
