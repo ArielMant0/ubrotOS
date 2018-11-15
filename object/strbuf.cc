@@ -18,14 +18,14 @@
 
 Stringbuffer::Stringbuffer()
 {
-   m_pos = 0;
+	m_pos = 0;
 } 
 
 void Stringbuffer::putc(char c)
 {
-  if (m_pos >= MAX_SIZE)
-  {
-    flush();
-  }
-  m_buffer[m_pos++] = c;
+	if (m_pos >= MAX_SIZE)
+ 	{
+		flush();
+	}
+	m_buffer[m_pos++] = c;
 }

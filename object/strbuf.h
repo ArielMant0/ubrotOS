@@ -21,19 +21,18 @@
 class Stringbuffer
 {
 private:
-  Stringbuffer(const Stringbuffer &copy); // Verhindere Kopieren
+	Stringbuffer(const Stringbuffer &copy); // Verhindere Kopieren
 
 protected:
-  
-  char m_buffer[MAX_SIZE];
-  int m_pos;
+	char m_buffer[MAX_SIZE];
+	int m_pos;
 
 public:
  
-  Stringbuffer(); 
-  void putc(char c);
+	Stringbuffer(); 
+	void putc(char c);
 
-  virtual void flush() = 0;
+	virtual void flush() = 0;
 };
 
 #endif

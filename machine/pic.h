@@ -17,13 +17,45 @@
 #ifndef __pic_include__
 #define __pic_include__
 
+/* INCLUDES */
+#include "machine/cpu.h"
+
+enum 
+{
+    timer    = 0,
+    keyboard = 1
+};
+
+CPU g_cpu;
+
 class PIC
- {
-private:
-    PIC(const PIC &copy); // Verhindere Kopieren
+{
+
 public:
     PIC() {}
-/* Hier muesst ihr selbst Code vervollstaendigen */          
- };
+
+	/**
+ 	 * Lässt zu, dass der PIC Unterbrechungen des Geräts Nummer 
+ 	 * interrupt_device an den Prozessor weiterleitet.
+ 	 */
+	void allow(int interrupt_device);
+
+	/**
+	 * Verhindert, dass der PIC Unterbrechungen des Geräts Nummer 
+	 * interrupt_device an den Prozessor weiterleitet.
+	 */
+	void forbid(int interrupt_device);
+
+	/**
+	 * Gibt den Zustand des Maskierbits von interrupt_device zurück. 
+	 * Wenn Unterbrechungen dieses Geräts nicht an die CPU weitergeleitet werden, 
+	 * soll true zurückgegeben werden, andernfalls false. 
+	 */
+	bool is_masked(int interrupt_device);
+
+private:
+	PIC(const PIC &copy); // Verhindere Kopieren
+
+};
 
 #endif

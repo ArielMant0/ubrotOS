@@ -17,9 +17,41 @@
 
 class Plugbox
  {
+public: 
+
+	/**
+     * Im Konstruktor wird für alle Unterbrechungen und Ausnahmen das global 
+     * bekannte Panic-Objekt panic eingetragen, 
+     * das eine minimale Unterbrechungsbehandlung sicherstellt.
+	 */
+	Plugbox ();
+
+	/**
+	 * Mit dieser Methode kann das Objekt einer spezialisierten 
+	 * Unterbrechungsbehandlung gate zu der Unterbrechung Nummer slot 
+	 * in die Plugbox eingetragen werden.
+	 */
+	void assign (unsigned int slot, Gate& gate);
+    
+    /**
+     * Hiermit kann das Gate-Objekt abgefragt werden, das zu der 
+     * Unterbrechung Nummer slot in die Plugbox eingetragen wurde. 
+     */
+	Gate& report (unsigned int slot)
+
 private:
     Plugbox(const Plugbox &copy); // Verhindere Kopieren
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+
+public:
+	/**
+	 * Interrupt-Nummer des Timer Bausteins
+	 */
+	int timer = 32;
+    /**
+	 * Interrupt-Nummer der Tastatur 
+	 */
+	int keyboard = 33;
+    
  };
 
 #endif

@@ -14,4 +14,21 @@
 /* kann mit Hilfe der Klasse CPU festgelegt werden.                          */
 /*****************************************************************************/
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+/* INCLUDES */
+
+#include "machine/pic.h"
+
+void PIC::allow(int interrupt_device)
+{
+	g_cpu.enable_int();
+}
+
+void PIC::forbid(int interrupt_device)
+{
+	g_cpu.disable_int();
+}
+
+bool PIC::is_masked(int interrupt_device)
+{
+	return true;
+}
