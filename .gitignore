@@ -1,3 +1,4 @@
 # Folder
-build
-isofiles
+build/
+isofiles/
+dep/
