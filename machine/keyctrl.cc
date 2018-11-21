@@ -12,11 +12,10 @@
 
 #include "machine/keyctrl.h"
 #include "device/cgastr.h"
+#include "machine/pic.h"
 
 #define MAX_WAIT 250000
 
-extern CGA_Stream kout;
- 
 /* STATIC MEMERS */
 
 unsigned char Keyboard_Controller::normal_tab[] =
@@ -275,33 +274,23 @@ Keyboard_Controller::Keyboard_Controller () :
 
 Key Keyboard_Controller::key_hit ()
 {
-    Key invalid;  // nicht explizit initialisierte Tasten sind ungueltig
-    int status, counter = 0;
-    // Wait for key input
-    while (counter++ < MAX_WAIT)
-    {
-        status = ctrl_port.inb();
-        if ((status & outb) == outb)
-        {
-            break;
-        }
-    }
+    Key key;  // nicht explizit initialisierte Tasten sind ungueltig
     // Read code
     code = data_port.inb();
     // Decode scan code
     if (!key_decoded())
     {
         code = 0;
-        return invalid;
+        return key; // invalid
     }
 
-    invalid.ascii(gather.ascii());
-    invalid.scancode(gather.scancode());
+    key.ascii(gather.ascii());
+    key.scancode(gather.scancode());
 
     gather.invalidate();
     code = 0;
     
-    return invalid;
+    return key;
 }
 
 // REBOOT: Fuehrt einen Neustart des Rechners durch. Ja, beim PC macht
@@ -355,6 +344,12 @@ void Keyboard_Controller::set_led (char led, bool on)
 
 bool Keyboard_Controller::write_command(int cmd)
 {
+    bool enabled = !g_pic.is_masked(keyboard);
+
+    if (enabled) {
+        g_pic.forbid(keyboard);
+    }
+
     int status, counter = 0;
     // Wait till we can write a command
     while (counter++ < MAX_WAIT)
@@ -378,13 +373,22 @@ bool Keyboard_Controller::write_command(int cmd)
             break;
         }
     }
+
+    counter = 0;
+    bool ack = false;
     // Read ACK data byte
     while (counter++ < MAX_WAIT)
     {
         if (data_port.inb() == kbd_reply::ack)
         {
-            return true;
+            break;
+            ack = true;
         }
     }
-    return false;
+
+    if (enabled) {
+        g_pic.allow(keyboard);
+    }
+
+    return ack;
 }

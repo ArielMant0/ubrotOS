@@ -5,10 +5,12 @@
 int main()
 {
     Application app;
-    if (!app.test())
-    {
-        return -1;
-    }
+    //if (!app.test())
+    //{
+    //    return -1;
+    //}
+
+    app.action();
 
    	return 0;
 }

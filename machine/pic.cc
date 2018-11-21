@@ -17,23 +17,36 @@
 /* INCLUDES */
 
 #include "machine/pic.h"
+#include "machine/cpu.h"
+
+#include "device/cgastr.h"
+
+PIC g_pic;
 
 PIC::PIC() : m_imr1(0x21), m_imr2(0xa1)
 {
+	// Enable interrupts
+	//g_cpu.enable_int();
+	// Set masks
 	m_mask1 = m_imr1.inb();
 	m_mask2 = m_imr2.inb();
-}
 
-void PIC::allow(int interrupt_device)
-{
-	if (interrupt_device < 8) {
-		m_imr1.outb(m_mask1 | get_mask(interrupt_device));
-	} else {
-		m_imr2.outb(m_mask2 | get_mask(interrupt_device));
-	}
+	//forbid(keyboard);
+	//forbid(timer);
 }
 
 void PIC::forbid(int interrupt_device)
+{
+	if (interrupt_device < 8) {
+		m_mask1 = m_mask1 | get_mask(interrupt_device);
+		m_imr1.outb(m_mask1);
+	} else {
+		m_mask2 = m_mask2 | get_mask(interrupt_device);
+		m_imr2.outb(m_mask2);
+	}
+}
+
+void PIC::allow(int interrupt_device)
 {
 	if (interrupt_device < 8) {
 		m_mask1 = m_mask1 & (~get_mask(interrupt_device));
@@ -47,8 +60,10 @@ void PIC::forbid(int interrupt_device)
 bool PIC::is_masked(int interrupt_device)
 {
 	if (interrupt_device < 8) {
-		return get_mask(interrupt_device) & m_imr1;
+		return get_mask(interrupt_device) & m_mask2;
+		//return (m_mask1 & interrupt_device) == interrupt_device;
 	} else {
-		return get_mask(interrupt_device) & m_imr2;
+		return get_mask(interrupt_device) & m_mask2;
+		//return (m_mask2 & interrupt_device) == interrupt_device;
 	}
 }

@@ -15,8 +15,8 @@
 
 #include "guard/gate.h"
 
-class Plugbox
- {
+class PlugBox
+{
 public: 
 
 	/**
@@ -24,23 +24,23 @@ public:
      * bekannte Panic-Objekt panic eingetragen, 
      * das eine minimale Unterbrechungsbehandlung sicherstellt.
 	 */
-	Plugbox ();
+	PlugBox ();
 
 	/**
 	 * Mit dieser Methode kann das Objekt einer spezialisierten 
 	 * Unterbrechungsbehandlung gate zu der Unterbrechung Nummer slot 
-	 * in die Plugbox eingetragen werden.
+	 * in die PlugBox eingetragen werden.
 	 */
 	void assign (unsigned int slot, Gate& gate);
     
     /**
      * Hiermit kann das Gate-Objekt abgefragt werden, das zu der 
-     * Unterbrechung Nummer slot in die Plugbox eingetragen wurde. 
+     * Unterbrechung Nummer slot in die PlugBox eingetragen wurde. 
      */
-	Gate& report (unsigned int slot)
+	Gate& report (unsigned int slot);
 
 private:
-    Plugbox(const Plugbox &copy); // Verhindere Kopieren
+    PlugBox(const PlugBox &copy); // Verhindere Kopieren
 
 public:
 	/**
@@ -52,8 +52,12 @@ public:
 	 */
 	const int keyboard = 33;
 
-	
+	const static int GATE_NUM = 244;
+
+	Gate *m_gates[GATE_NUM];
     
- };
+};
+
+extern PlugBox g_plugbox;
 
 #endif

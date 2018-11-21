@@ -13,13 +13,14 @@
 #ifndef __CPU_include__
 #define __CPU_include__
 
-CPU g_cpu;
 
 // Die folgenden drei Funktionen werden in cpu.asm implementiert.
 extern "C" void int_enable();
 extern "C" void int_disable();
 extern "C" void cpu_idle();
 extern "C" void cpu_halt();
+
+#include "device/cgastr.h"
 
 class CPU
 {
@@ -52,5 +53,7 @@ public:
 private:
     CPU(const CPU &copy); // Verhindere Kopieren
 };
+
+extern CPU g_cpu;
 
 #endif

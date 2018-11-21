@@ -12,7 +12,9 @@
 
 #include "user/appl.h"
 #include "device/cgastr.h"
-#include "machine/keyctrl.h"
+#include "device/keyboard.h"
+
+#include "machine/cpu.h" // TODO
          
 /* GLOBALE VARIABLEN */
 
@@ -265,7 +267,12 @@ bool Application::test_keyboard()
 
 void Application::action() 
 {
-
+    kout << "\nStart" << endl;
+    Keyboard keyb;
+    g_cpu.enable_int();
+    while(true)
+    {
+    }
 }
 
 bool Application::test()

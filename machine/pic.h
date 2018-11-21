@@ -20,9 +20,8 @@
 /* INCLUDES */
 #include "machine/io_port.h"
 
-PIC g_pic;
 
-enum 
+enum
 {
     timer    = 0,
     keyboard = 1
@@ -60,16 +59,19 @@ private:
 	int get_mask(int interrupt_device)
 	{
 		if (interrupt_device < 8) {
-			return m_mask1 & (1 << interrupt_device);
+			return 1 << interrupt_device;
 		} else {
-			return m_mask2 & (1 << (interrupt_device-7));
+			return 1 << (interrupt_device-8);
 		}
 	}
 
-
+	// Interrupt Mask Registers for PIC1 and PIC2
 	IO_Port m_imr1, m_imr2;
+	// Currently enabled ports for PIC1 and PIC2
 	int m_mask1, m_mask2;
 
 };
+
+extern PIC g_pic;
 
 #endif

@@ -8,5 +8,15 @@
 /* Standard Unterbrechungsbehandlung.                                        */
 /*****************************************************************************/
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
- 
+#include "device/panic.h"
+#include "machine/cpu.h"
+#include "device/cgastr.h"
+
+Panic g_panic;
+
+void Panic::trigger()
+{
+	kout << "Panic Trigger" << endl;
+
+	//g_cpu.idle();
+} 

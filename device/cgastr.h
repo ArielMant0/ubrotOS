@@ -34,4 +34,6 @@ private:
       CGA_Screen *m_screen;
 };
 
+extern CGA_Stream kout;
+
 #endif

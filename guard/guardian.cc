@@ -11,6 +11,9 @@
 
 /* INCLUDES */
 #include "device/cgastr.h"
+#include "machine/plugbox.h"
+
+extern CGA_Stream kout;
 
 extern "C" void guardian (unsigned int slot);
 
@@ -20,5 +23,8 @@ extern "C" void guardian (unsigned int slot);
 void guardian (unsigned int slot)
 {
 	// hier ausgabe hin packen
-	kout << "Interrupt " << slot << " detected" << endl;
+	if (slot == (unsigned int) g_plugbox.keyboard)
+		g_plugbox.report(slot).trigger();
+	else
+		kout << "Interrupt " << slot << " detected" << endl;
 }
