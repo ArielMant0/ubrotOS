@@ -10,4 +10,19 @@
 /* exception festlegen.                                                      */
 /*****************************************************************************/
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+#include "machine/plugbox.h"
+
+PlugBox::Plugbox ()
+{
+
+}
+
+void PlugBox::assign (unsigned int slot, Gate& gate)
+{
+
+}
+
+Gate& PlugBox::report (unsigned int slot)
+{
+
+}

@@ -46,11 +46,13 @@ public:
 	/**
 	 * Interrupt-Nummer des Timer Bausteins
 	 */
-	int timer = 32;
+	const int timer = 32;
     /**
 	 * Interrupt-Nummer der Tastatur 
 	 */
-	int keyboard = 33;
+	const int keyboard = 33;
+
+	
     
  };
 

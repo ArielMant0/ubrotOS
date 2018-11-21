@@ -18,7 +18,9 @@
 #define __pic_include__
 
 /* INCLUDES */
-#include "machine/cpu.h"
+#include "machine/io_port.h"
+
+PIC g_pic;
 
 enum 
 {
@@ -26,13 +28,12 @@ enum
     keyboard = 1
 };
 
-CPU g_cpu;
 
 class PIC
 {
 
 public:
-    PIC() {}
+    PIC();
 
 	/**
  	 * Lässt zu, dass der PIC Unterbrechungen des Geräts Nummer 
@@ -55,6 +56,19 @@ public:
 
 private:
 	PIC(const PIC &copy); // Verhindere Kopieren
+
+	int get_mask(int interrupt_device)
+	{
+		if (interrupt_device < 8) {
+			return m_mask1 & (1 << interrupt_device);
+		} else {
+			return m_mask2 & (1 << (interrupt_device-7));
+		}
+	}
+
+
+	IO_Port m_imr1, m_imr2;
+	int m_mask1, m_mask2;
 
 };
 

@@ -18,17 +18,37 @@
 
 #include "machine/pic.h"
 
+PIC::PIC() : m_imr1(0x21), m_imr2(0xa1)
+{
+	m_mask1 = m_imr1.inb();
+	m_mask2 = m_imr2.inb();
+}
+
 void PIC::allow(int interrupt_device)
 {
-	g_cpu.enable_int();
+	if (interrupt_device < 8) {
+		m_imr1.outb(m_mask1 | get_mask(interrupt_device));
+	} else {
+		m_imr2.outb(m_mask2 | get_mask(interrupt_device));
+	}
 }
 
 void PIC::forbid(int interrupt_device)
 {
-	g_cpu.disable_int();
+	if (interrupt_device < 8) {
+		m_mask1 = m_mask1 & (~get_mask(interrupt_device));
+		m_imr1.outb(m_mask1);
+	} else {
+		m_mask2 = m_mask2 & (~get_mask(interrupt_device));
+		m_imr2.outb(m_mask2);
+	}
 }
 
 bool PIC::is_masked(int interrupt_device)
 {
-	return true;
+	if (interrupt_device < 8) {
+		return get_mask(interrupt_device) & m_imr1;
+	} else {
+		return get_mask(interrupt_device) & m_imr2;
+	}
 }

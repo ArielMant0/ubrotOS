@@ -13,6 +13,8 @@
 #ifndef __CPU_include__
 #define __CPU_include__
 
+CPU g_cpu;
+
 // Die folgenden drei Funktionen werden in cpu.asm implementiert.
 extern "C" void int_enable();
 extern "C" void int_disable();
