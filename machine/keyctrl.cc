@@ -328,10 +328,24 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
         g_pic.forbid(keyboard);
     }
 
+    if (speed > 20) {
+        speed = 20;
+    } else if (speed < 0) {
+        speed = 0;
+    }
+
+    if (delay > 3) {
+        delay = 3;
+    } else if (delay < 0) {
+        delay = 0;
+    }
+
     // TODO: error handling for wrong values
     if (write_command(kbd_cmd::set_speed))
     {
-        write_command((delay << 5) | speed);
+        m_repeat_speed = speed;
+        m_repeat_delay = delay << 5;
+        write_command(m_repeat_delay | m_repeat_speed);
     }
 
     if (enabled) {

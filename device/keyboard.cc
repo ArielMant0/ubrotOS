@@ -45,18 +45,24 @@ bool Keyboard::specialStuff(Key &key) {
 	{
 		case '+':
 		{
-			//set_repeat_rate();
-			kout << "+a" << endl;
+			set_repeat_rate(m_repeat_speed+1, m_repeat_delay);
 			return true;
 		}
 		case '-':
 		{
-			kout << "-a" << endl;
+			set_repeat_rate(m_repeat_speed-1, m_repeat_delay);
 			return true;
 		}
-		case '':
+		default:
+			if (key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left())
+			{
+				kout << "REBOOT" << endl;
+				reboot();
+				return true;
+			}
 			
 	}
 
 	return false;
 }
+

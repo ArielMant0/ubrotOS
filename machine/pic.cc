@@ -56,9 +56,7 @@ bool PIC::is_masked(int interrupt_device)
 {
 	if (interrupt_device < 8) {
 		return get_mask(interrupt_device) & m_mask2;
-		//return (m_mask1 & interrupt_device) == interrupt_device;
 	} else {
 		return get_mask(interrupt_device) & m_mask2;
-		//return (m_mask2 & interrupt_device) == interrupt_device;
 	}
 }

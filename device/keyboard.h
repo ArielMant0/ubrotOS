@@ -20,7 +20,9 @@ class Keyboard : public Gate, public Keyboard_Controller
         
 private:
     Keyboard (const Keyboard &copy); // Verhindere Kopieren
-         
+
+    bool specialStuff(Key &key);
+
 public:
 
 	Keyboard();
@@ -29,8 +31,6 @@ public:
     void plugin ();
 
 	void trigger() override;
-
-    bool specialStuff(Key &key);
 };
 
 extern Keyboard g_keyboard;
