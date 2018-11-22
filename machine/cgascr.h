@@ -72,4 +72,6 @@ public:
 
 };
 
+extern CGA_Screen g_cga;
+
 #endif

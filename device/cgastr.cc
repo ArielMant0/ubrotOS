@@ -15,17 +15,15 @@
 
 CGA_Stream kout;
 
-CGA_Screen cga_screen;
-
 CGA_Stream::CGA_Stream() : O_Stream() {}
 
 void CGA_Stream::flush()
 {
-    cga_screen.print(m_buffer, m_pos);   
+    g_cga.print(m_buffer, m_pos);   
     O_Stream::flush();
 }
 
 CGA_Screen& CGA_Stream::screen()
 {
-	return cga_screen;
+	return g_cga;
 }

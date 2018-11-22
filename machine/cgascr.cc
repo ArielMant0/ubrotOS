@@ -14,6 +14,8 @@
 
 #include "machine/cgascr.h"
 
+CGA_Screen g_cga;
+
 #define CGA_START 0xb8000
 #define MAX_X 80
 #define MAX_Y 25 

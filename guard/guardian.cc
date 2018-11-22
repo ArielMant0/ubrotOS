@@ -23,8 +23,11 @@ extern "C" void guardian (unsigned int slot);
 void guardian (unsigned int slot)
 {
 	// hier ausgabe hin packen
-	if (slot == (unsigned int) g_plugbox.keyboard)
+	if (slot == (unsigned int) g_plugbox.keyboard || 
+		slot == (unsigned int) g_plugbox.timer) {
+
 		g_plugbox.report(slot).trigger();
-	else
+	} else {
 		kout << "Interrupt " << slot << " detected" << endl;
+	}
 }
