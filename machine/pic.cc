@@ -25,14 +25,9 @@ PIC g_pic;
 
 PIC::PIC() : m_imr1(0x21), m_imr2(0xa1)
 {
-	// Enable interrupts
-	//g_cpu.enable_int();
 	// Set masks
 	m_mask1 = m_imr1.inb();
 	m_mask2 = m_imr2.inb();
-
-	//forbid(keyboard);
-	//forbid(timer);
 }
 
 void PIC::forbid(int interrupt_device)

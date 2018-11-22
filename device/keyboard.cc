@@ -14,6 +14,8 @@
 
 #include "device/cgastr.h"
 
+Keyboard g_keyboard;
+
 Keyboard::Keyboard()
 {
 	plugin();
@@ -31,7 +33,30 @@ void Keyboard::trigger()
 	Key key = key_hit();
 	// Print key to screen
 	if (key.valid()) {
-		kout << key.ascii();
-		kout.flush();
+		if (!specialStuff(key)) {
+			kout << key.ascii();
+			kout.flush();
+		}
 	}
+}
+
+bool Keyboard::specialStuff(Key &key) {
+	switch (key.ascii())
+	{
+		case '+':
+		{
+			//set_repeat_rate();
+			kout << "+a" << endl;
+			return true;
+		}
+		case '-':
+		{
+			kout << "-a" << endl;
+			return true;
+		}
+		case '':
+			
+	}
+
+	return false;
 }

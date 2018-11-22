@@ -267,8 +267,7 @@ bool Application::test_keyboard()
 
 void Application::action() 
 {
-    kout << "\nStart" << endl;
-    Keyboard keyb;
+    // kout << "\nStart" << endl;
     g_cpu.enable_int();
     while(true)
     {

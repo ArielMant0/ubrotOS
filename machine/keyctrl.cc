@@ -322,16 +322,32 @@ void Keyboard_Controller::reboot ()
 //                  (sehr langsam).
 void Keyboard_Controller::set_repeat_rate (int speed, int delay)
 {
+    bool enabled = !g_pic.is_masked(keyboard);
+
+    if (enabled) {
+        g_pic.forbid(keyboard);
+    }
+
     // TODO: error handling for wrong values
     if (write_command(kbd_cmd::set_speed))
     {
         write_command((delay << 5) | speed);
+    }
+
+    if (enabled) {
+        g_pic.allow(keyboard);
     }
 }
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
 void Keyboard_Controller::set_led (char led, bool on)
 {
+    bool enabled = !g_pic.is_masked(keyboard);
+
+    if (enabled) {
+        g_pic.forbid(keyboard);
+    }
+    
     // TODO: error handling for wrong values
     if (write_command(kbd_cmd::set_led))
     {
@@ -340,15 +356,13 @@ void Keyboard_Controller::set_led (char led, bool on)
         write_command(leds);
     }
  
+    if (enabled) {
+        g_pic.allow(keyboard);
+    }
 }
 
 bool Keyboard_Controller::write_command(int cmd)
 {
-    bool enabled = !g_pic.is_masked(keyboard);
-
-    if (enabled) {
-        g_pic.forbid(keyboard);
-    }
 
     int status, counter = 0;
     // Wait till we can write a command
@@ -384,10 +398,6 @@ bool Keyboard_Controller::write_command(int cmd)
             break;
             ack = true;
         }
-    }
-
-    if (enabled) {
-        g_pic.allow(keyboard);
     }
 
     return ack;

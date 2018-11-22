@@ -29,6 +29,10 @@ public:
     void plugin ();
 
 	void trigger() override;
+
+    bool specialStuff(Key &key);
 };
+
+extern Keyboard g_keyboard;
 
 #endif
