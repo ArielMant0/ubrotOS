@@ -53,6 +53,21 @@ bool Keyboard::specialStuff(Key &key) {
 			set_repeat_rate(m_repeat_speed-1, m_repeat_delay);
 			return true;
 		}
+		case '1':
+		{
+			set_led(1, true);
+			break;
+		}
+		case '2':
+		{
+			set_led(2, true);
+			break;
+		}
+		case '3':
+		{
+			set_led(3, true);
+			break;
+		}
 		default:
 			if (key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left())
 			{

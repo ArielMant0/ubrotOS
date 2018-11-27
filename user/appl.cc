@@ -13,6 +13,7 @@
 #include "user/appl.h"
 #include "device/cgastr.h"
 #include "device/keyboard.h"
+#include "device/clock.h"
 
 #include "machine/cpu.h" // TODO
          
@@ -267,10 +268,14 @@ bool Application::test_keyboard()
 
 void Application::action() 
 {
-    // kout << "\nStart" << endl;
     g_cpu.enable_int();
     while(true)
     {
+        g_cpu.disable_int();
+        g_clock.trigger();
+        g_cpu.enable_int();
+        // Handle queued interrupts
+        for (int i = 0; i < 1000; i++) {}
     }
 }
 
