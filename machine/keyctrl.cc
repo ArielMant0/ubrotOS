@@ -265,12 +265,12 @@ Keyboard_Controller::Keyboard_Controller () :
     ctrl_port (0x64), data_port (0x60)
 {
     // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
-    set_led (led::caps_lock, true);
-    set_led (led::scroll_lock, true);
-    set_led (led::num_lock, true);
+    set_led (led::caps_lock, false);
+    set_led (led::scroll_lock, false);
+    set_led (led::num_lock, false);
 
     // maximale Geschwindigkeit, minimale Verzoegerung
-    set_repeat_rate (31, 3);
+    set_repeat_rate (20, 3);
 }
 
 // KEY_HIT: Dient der Tastaturabfrage nach dem Auftreten einer Tastatur-
@@ -379,12 +379,15 @@ void Keyboard_Controller::set_led (char led, bool on)
         g_pic.forbid(keyboard);
     }
     
-    //g_cga.show(0,0, '!');
-    // TODO: error handling for wrong values
+    if (led < 0 || led > 3)
+    {
+        return;
+    }
+
+    // Write command
     if (write_command(kbd_cmd::set_led))
     {
         leds = on ? (leds | led) : (leds ^ led);
-        //g_cga.show(0,0, leds-'0');
         // Write data byte to data port
         write_command(leds);
     }

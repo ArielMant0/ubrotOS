@@ -19,10 +19,13 @@ class Keyboard : public Gate, public Keyboard_Controller
 {
         
 private:
+
+	bool m_num, m_scroll, m_caps;
+	
     Keyboard (const Keyboard &copy); // Verhindere Kopieren
 
     bool specialStuff(Key &key);
-    
+
     void checkInvalidKeys(Key &key);
 
 public:
