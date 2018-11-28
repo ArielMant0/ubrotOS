@@ -262,7 +262,7 @@ void Keyboard_Controller::get_ascii_code ()
 //                      maximale Geschwindigkeit eingestellt.
 
 Keyboard_Controller::Keyboard_Controller () : 
-    ctrl_port (0x64), data_port (0x60), leds(0)
+    leds(0), ctrl_port (0x64), data_port (0x60)
 {
     // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
     set_led (led::caps_lock, false);
@@ -378,8 +378,8 @@ void Keyboard_Controller::set_led (char led, bool on)
     {
         g_pic.forbid(keyboard);
     }
-    
-    if (led < 0 || led > 3)
+    // Only allow valid input
+    if (led != 1 && led != 2 && led != 4)
     {
         return;
     }
