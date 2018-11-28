@@ -12,7 +12,7 @@
 #define __Key_include__
 
 class Key
- {
+{
     // Kopieren erlaubt!
 
     unsigned char asc;
@@ -21,24 +21,26 @@ class Key
 
     // Bit-Masken fuer die Modifier-Tasten
     struct mbit
-     {
-	enum
-	{
-	   shift       = 1,
-	   alt_left    = 2,
-	   alt_right   = 4,
-	   ctrl_left   = 8,
-	   ctrl_right  = 16,
-	   caps_lock   = 32,
-	   num_lock    = 64,
-	   scroll_lock = 128
-	};
-     };
+    {
+    	enum
+    	{
+    	    shift       = 1,
+    	    alt_left    = 2,
+    	    alt_right   = 4,
+    	    ctrl_left   = 8,
+    	    ctrl_right  = 16,
+    	    caps_lock   = 32,
+    	    num_lock    = 64,
+    	    scroll_lock = 128
+    	};
+    };
 
 public:
     // DEFAULT-KONSTRUKTOR: setzt ASCII, Scancode und Modifier auf 0
     //                      und bezeichnet so einen ungueltigen Tastencode
     Key () : asc (0), scan (0), modi (0) {}
+
+    Key (const Key &copy) : asc(copy.asc), scan(copy.scan), modi(copy.modi) {}
 
     // VALID: mit Scancode = 0 werden ungueltige Tasten gekennzeichnet.
     bool valid ()      { return scan != 0; }
@@ -87,13 +89,13 @@ public:
 
     // Scan-Codes einiger spezieller Tasten
     struct scan
-     { 
-	enum
-	{
-	   f1 = 0x3b, del = 0x53, up=72, down=80, left=75, right=77,
-	   div = 8
-	};
-     };
- };
+    { 
+	    enum
+	    {
+	        f1 = 0x3b, del = 0x53, up=72, down=80, left=75, right=77,
+	        div = 8
+	    };
+    };
+};
 
 #endif

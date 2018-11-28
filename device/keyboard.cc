@@ -32,15 +32,39 @@ void Keyboard::trigger()
 	// Get Key
 	Key key = key_hit();
 	// Print key to screen
-	if (key.valid()) {
-		if (!specialStuff(key)) {
+	if (key.valid()) 
+	{
+		if (!specialStuff(key)) 
+		{
 			kout << key.ascii();
 			kout.flush();
 		}
 	}
+	else
+	{
+		checkInvalidKeys(key);
+	}
 }
 
-bool Keyboard::specialStuff(Key &key) {
+void Keyboard::checkInvalidKeys(Key &key) 
+{
+	if (key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left())
+	{
+		reboot();
+	}
+	else if (key.caps_lock())
+	{
+		set_led(3, true);
+	}
+}
+
+bool Keyboard::specialStuff(Key &key)
+{
+	// aktuelles verhalten:
+	// wenn ich 1 ODER 2 drücke wird die erste Lampe aus und die zweite angemacht ...
+	// das zurücksetzen der lampen geht komplett nicht
+	// repeatrate hat keinen einfluss
+
 	switch (key.ascii())
 	{
 		case '+':
@@ -83,26 +107,7 @@ bool Keyboard::specialStuff(Key &key) {
 			set_led(3, false);
 			break;
 		}
-		default:
-		{
-			if (key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left() ||  key.caps_lock())
-			{
-				kout << "REBOOT" << endl;
-				reboot();
-				return true;
-			}
-		}
-	}
-	if (key.alt_left())
-	{
-		kout << "REBOOT" << endl;
-		reboot();
-		return true;
-	}
-	if (key.caps_lock())
-	{
-		set_led(2, true);
-		return true;
+		default: break;
 	}
 
 	return false;

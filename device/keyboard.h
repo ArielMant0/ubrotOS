@@ -22,6 +22,8 @@ private:
     Keyboard (const Keyboard &copy); // Verhindere Kopieren
 
     bool specialStuff(Key &key);
+    
+    void checkInvalidKeys(Key &key);
 
 public:
 
