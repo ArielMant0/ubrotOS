@@ -37,7 +37,11 @@ private:
        enum { set_led = 0xed, set_speed = 0xf3 };
    };
    enum { cpu_reset = 0xfe };
-
+    // Namen der LEDs
+   struct led
+   {
+       enum { caps_lock = 4, num_lock = 2, scroll_lock = 1 };
+   };
 
     // Antworten der Tastatur
    struct kbd_reply
@@ -68,12 +72,6 @@ private:
 
    bool write_command(int cmd);
 
-protected:
-    // Namen der LEDs
-   struct led
-   {
-       enum { caps_lock = 4, num_lock = 2, scroll_lock = 1 };
-   };
 
 public:
     // Store current repeat rate setting for easier manipulation

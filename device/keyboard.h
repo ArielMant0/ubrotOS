@@ -20,8 +20,10 @@ class Keyboard : public Gate, public Keyboard_Controller
         
 private:
 
+	enum leds { caps_lock = 4, num_lock = 2, scroll_lock = 1 };
+
 	bool m_num, m_scroll, m_caps;
-	
+
     Keyboard (const Keyboard &copy); // Verhindere Kopieren
 
     bool specialStuff(Key &key);
