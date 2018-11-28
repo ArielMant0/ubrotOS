@@ -387,7 +387,7 @@ void Keyboard_Controller::set_led (char led, bool on)
     // Write command
     if (write_command(kbd_cmd::set_led))
     {
-        leds = on ? (leds | led) : (leds ^ led);
+        leds = on ? (leds | led) : (leds & ~led);
         // Write data byte to data port
         write_command(leds);
     }
