@@ -68,14 +68,41 @@ bool Keyboard::specialStuff(Key &key) {
 			set_led(3, true);
 			break;
 		}
+		case '4':
+		{
+			set_led(1, false);
+			break;
+		}
+		case '5':
+		{
+			set_led(2, false);
+			break;
+		}
+		case '6':
+		{
+			set_led(3, false);
+			break;
+		}
 		default:
-			if (key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left())
+		{
+			if (key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left() ||  key.caps_lock())
 			{
 				kout << "REBOOT" << endl;
 				reboot();
 				return true;
 			}
-			
+		}
+	}
+	if (key.alt_left())
+	{
+		kout << "REBOOT" << endl;
+		reboot();
+		return true;
+	}
+	if (key.caps_lock())
+	{
+		set_led(2, true);
+		return true;
 	}
 
 	return false;
