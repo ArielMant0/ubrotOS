@@ -58,9 +58,12 @@ private:
 
 	int get_mask(int interrupt_device)
 	{
-		if (interrupt_device < 8) {
+		if (interrupt_device < 8) 
+		{
 			return 1 << interrupt_device;
-		} else {
+		} 
+		else 
+		{
 			return 1 << (interrupt_device-8);
 		}
 	}

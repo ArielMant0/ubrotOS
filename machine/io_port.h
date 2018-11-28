@@ -28,37 +28,38 @@ extern "C" int inw  (int port);
 /* KLASSENDEFINITION */
 
 class IO_Port
- {
-      // Kopieren erlaubt!
+{
+    // Kopieren erlaubt!
 
-      // Adresse im I/O-Adressraum
-      int address;
-   public:
-      IO_Port (int a) : address (a) {};
+    // Adresse im I/O-Adressraum
+    int address;
+    
+public:
+    IO_Port (int a) : address (a) {};
 
-      // OUTB: Byteweise Ausgabe eines Wertes ueber einen I/O-Port.
-      void outb (int val) const
-       { 
-	 ::outb (address, val); 
-       };
+    // OUTB: Byteweise Ausgabe eines Wertes ueber einen I/O-Port.
+    void outb (int val) const
+    { 
+	    ::outb (address, val); 
+    };
 
-      // OUTW: Wortweise Ausgabe eines Wertes ueber einen I/O-Port.
-      void outw (int val) const
-       { 
-	 ::outw (address, val); 
-       };
+    // OUTW: Wortweise Ausgabe eines Wertes ueber einen I/O-Port.
+    void outw (int val) const
+    { 
+	    ::outw (address, val); 
+    };
 
-      // INB: Byteweises Einlesen eines Wertes ueber einen I/O-Port.
-      int inb () const
-       { 
-	 return ::inb (address); 
-       };
+    // INB: Byteweises Einlesen eines Wertes ueber einen I/O-Port.
+    int inb () const
+    { 
+	    return ::inb (address); 
+    };
 
-      // INW: Wortweises Einlesen eines Wertes ueber einen I/O-Port.
-      int inw () const
-       { 
-	 return ::inw (address); 
-       };
- };
+    // INW: Wortweises Einlesen eines Wertes ueber einen I/O-Port.
+    int inw () const
+    { 
+	    return ::inw (address); 
+    };
+};
 
 #endif

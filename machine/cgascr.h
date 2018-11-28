@@ -19,18 +19,18 @@ class CGA_Screen
 {
 private: 
 
-   CGA_Screen(const CGA_Screen &copy); // Verhindere Kopieren
+    CGA_Screen(const CGA_Screen &copy); // Verhindere Kopieren
 
-   void scroll_down();
+    void scroll_down();
 
-   void calc_next_pos(int x, int y, int &x_to, int &y_to, bool scroll=true);
+    void calc_next_pos(int x, int y, int &x_to, int &y_to, bool scroll=true);
 
-   void set_cursor();
+    void set_cursor();
 
-   void read_cursor();
+    void read_cursor();
    
-   int m_x, m_y;
-   IO_Port index, data;
+    int m_x, m_y;
+    IO_Port index, data;
 
 public:
 
@@ -56,19 +56,19 @@ public:
 
     CGA_Screen();
 
-   void show(int x, int y, char c, unsigned char attrib=char(Color::white));
+    void show(int x, int y, char c, unsigned char attrib=char(Color::white));
 
-   void setpos(int x, int y);
+    void setpos(int x, int y);
 
-   void getpos(int &x, int &y);
+    void getpos(int &x, int &y);
 
-   void print(char *text, int length, unsigned char attrib=char(Color::white));
+    void print(char *text, int length, unsigned char attrib=char(Color::white));
 
-   char get_char(int x, int y);
+    char get_char(int x, int y);
 
-   void print_error(char *filename, int length);
+    void print_error(char *filename, int length);
 
-   void clear();
+    void clear();
 
 };
 

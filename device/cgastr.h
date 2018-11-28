@@ -21,17 +21,17 @@ class CGA_Stream : public O_Stream
 {
 public:
 
-      CGA_Stream();
+    CGA_Stream();
 
-      void flush() override;
+    void flush() override;
 
-      CGA_Screen& screen();
+    CGA_Screen& screen();
 
 private:
 
-      CGA_Stream(CGA_Stream &copy); // Verhindere Kopieren
+    CGA_Stream(CGA_Stream &copy); // Verhindere Kopieren
 
-      CGA_Screen *m_screen;
+    CGA_Screen *m_screen;
 };
 
 extern CGA_Stream kout;

@@ -98,7 +98,8 @@ char O_Stream::get_buffer_at(unsigned int i)
 
 void O_Stream::calc_num(long number)
 {
-	if (number < 0) {
+	if (number < 0) 
+	{
 		switch (m_mode)
 		{
 			case Mode::HEX:

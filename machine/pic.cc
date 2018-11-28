@@ -32,10 +32,13 @@ PIC::PIC() : m_imr1(0x21), m_imr2(0xa1)
 
 void PIC::forbid(int interrupt_device)
 {
-	if (interrupt_device < 8) {
+	if (interrupt_device < 8) 
+	{
 		m_mask1 = m_mask1 | get_mask(interrupt_device);
 		m_imr1.outb(m_mask1);
-	} else {
+	} 
+	else 
+	{
 		m_mask2 = m_mask2 | get_mask(interrupt_device);
 		m_imr2.outb(m_mask2);
 	}
@@ -43,10 +46,13 @@ void PIC::forbid(int interrupt_device)
 
 void PIC::allow(int interrupt_device)
 {
-	if (interrupt_device < 8) {
+	if (interrupt_device < 8) 
+	{
 		m_mask1 = m_mask1 & (~get_mask(interrupt_device));
 		m_imr1.outb(m_mask1);
-	} else {
+	} 
+	else 
+	{
 		m_mask2 = m_mask2 & (~get_mask(interrupt_device));
 		m_imr2.outb(m_mask2);
 	}
@@ -54,9 +60,12 @@ void PIC::allow(int interrupt_device)
 
 bool PIC::is_masked(int interrupt_device)
 {
-	if (interrupt_device < 8) {
+	if (interrupt_device < 8) 
+	{
 		return get_mask(interrupt_device) & m_mask2;
-	} else {
+	} 
+	else 
+	{
 		return get_mask(interrupt_device) & m_mask2;
 	}
 }

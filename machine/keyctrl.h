@@ -35,19 +35,19 @@ private:
     struct kbd_cmd
     {
        enum { set_led = 0xed, set_speed = 0xf3 };
-   };
-   enum { cpu_reset = 0xfe };
+    };
+    enum { cpu_reset = 0xfe };
     // Namen der LEDs
-   struct led
-   {
-       enum { caps_lock = 4, num_lock = 2, scroll_lock = 1 };
-   };
+    struct led
+    {
+        enum { caps_lock = 4, num_lock = 2, scroll_lock = 1 };
+    };
 
     // Antworten der Tastatur
-   struct kbd_reply
-   {
-       enum { ack = 0xfa };
-   }; 
+    struct kbd_reply
+    {
+        enum { ack = 0xfa };
+    }; 
 
     // Konstanten fuer die Tastaturdekodierung
     enum { break_bit = 0x80, prefix1 = 0xe0, prefix2   = 0xe1 };
@@ -64,14 +64,13 @@ private:
     //              gedrueckt wurden. Ein Rueckgabewert true bedeutet, dass
     //              das Zeichen komplett ist, anderenfalls fehlen noch Make
     //              oder Breakcodes.
-   bool key_decoded ();
+    bool key_decoded ();
 
     // GET_ASCII_CODE: ermittelt anhand von Tabellen aus dem Scancode und
     //                 den gesetzten Modifier-Bits den ASCII Code der Taste.
-   void get_ascii_code ();
+    void get_ascii_code ();
 
-   bool write_command(int cmd);
-
+    bool write_command(int cmd);
 
 protected:
     // Store current repeat rate setting for easier manipulation
