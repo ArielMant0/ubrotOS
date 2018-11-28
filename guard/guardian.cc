@@ -24,10 +24,17 @@ void guardian (unsigned int slot)
 {
 	// hier ausgabe hin packen
 	if (slot == (unsigned int) g_plugbox.keyboard || 
-		slot == (unsigned int) g_plugbox.timer) {
+		slot == (unsigned int) g_plugbox.timer)
+	{
 
-		g_plugbox.report(slot).trigger();
-	} else {
+		Gate g = g_plugbox.report(slot)
+		if (g.prologue())
+		{
+			g_guard.relay(&g);
+		}
+	}
+	else
+	{
 		kout << "Interrupt " << slot << " detected" << endl;
 	}
 }

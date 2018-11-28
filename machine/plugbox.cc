@@ -30,6 +30,10 @@ void PlugBox::assign (unsigned int slot, Gate& gate)
 
 Gate& PlugBox::report (unsigned int slot)
 {
-	// TODO range check
+	if (slot >= GATE_NUM)
+	{
+		// TODO: print error or sth like that
+		return *m_gates[GATE_NUM-1]; 
+	}
 	return *m_gates[slot];
 }

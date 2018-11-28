@@ -1,28 +1,28 @@
+/* $Id: chain.h 956 2008-10-19 22:24:23Z hsc $ */
+
 /*****************************************************************************/
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                                 P A N I C                                 */
+/*                              C H A I N                                    */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Standard Unterbrechungsbehandlung.                                        */
+/* Verkettungszeiger zum Einfuegen eines Objektes in eine einfach verkettete */
+/* Liste.                                                                    */
 /*****************************************************************************/
 
-#include "device/panic.h"
-#include "machine/cpu.h"
-#include "device/cgastr.h"
+#ifndef __chain_include__
+#define __chain_include__
 
-Panic g_panic;
+class Chain
+ {
+private:
+      Chain(const Chain &copy); // Verhindere Kopieren
 
-bool Panic::prologue()
-{
-	return true;
-}
+public:
+      Chain() {}
+      Chain* next;
+ };
 
-void Panic::epilogue()
-{
-	// Print some kind of error message
-	kout << "Panic Trigger" << endl;
-	// Halt the CPU
-	g_cpu.halt();
-}
+#endif
+

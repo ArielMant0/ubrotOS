@@ -20,11 +20,11 @@ class Keyboard : public Gate, public Keyboard_Controller
         
 private:
 
+	Key m_key;
+
     Keyboard (const Keyboard &copy); // Verhindere Kopieren
 
     bool specialStuff(Key &key);
-
-    void checkInvalidKeys(Key &key);
 
 public:
 
@@ -33,7 +33,10 @@ public:
     // PLUGIN: 'Anstoepseln' der Tastatur. Ab sofort werden Tasten erkannt.
     void plugin ();
 
-	void trigger() override;
+	bool prologue() override;
+
+	void epilogue() override;
+
 };
 
 extern Keyboard g_keyboard;

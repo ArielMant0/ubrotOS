@@ -2,38 +2,32 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                                  G A T E                                  */
+/*                                G U A R D                                  */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Klasse von Objekten, die in der Lage sind, Unterbrechungen zu behandeln.  */
+/* Mit Hilfe dieser Klasse koennen Aktivitaeten, die einen kritischen        */
+/* Abschnitt betreffen, der mit einem Guard-Objekt geschuetzt ist, mit       */
+/* Unterbrechungsbehandlungsroutinen synchronisiert werden, die ebenfalls    */
+/* auf den kritischen Abschnitt zugreifen.                                   */
 /*****************************************************************************/
 
-#ifndef __Gate_include__
-#define __Gate_include__
+#include "guard/guard.h"
 
-class Gate : public Chain
+Guard g_guard;
+
+void Guard::leave()
 {
+	retne();
+}
 
-protected:
-
-	bool m_queued = false;
-
-public:
-	
-	virtual bool prologue() = 0;
-
-	virtual void epilogue() {}
-
-	void queued(bool q)
+void Guard::relay(Gate *item)
+{
+	if (avail())
 	{
-		m_queued = q;
+		m_queue.enqueue(item);
 	}
-
-	bool queued()
+	else
 	{
-		return m_queued;
+		item->epilogue();
 	}
-
-};
-                
-#endif
+}

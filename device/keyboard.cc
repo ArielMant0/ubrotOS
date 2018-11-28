@@ -27,21 +27,23 @@ void Keyboard::plugin()
 	g_pic.allow(keyboard);
 }
 
-void Keyboard::trigger()
+bool Keyboard::prologue()
 {
 	// Get Key
-	Key key = key_hit();
-	// Print key to screen
-	if (key.valid()) 
-	{
-		if (!specialStuff(key)) 
-		{
-			kout << key.ascii();
-			kout.flush();
-		}
-	}
+	m_key = key_hit();
+	// If its a valid key, do the epilogue
+	return m_key.valid();
 }
 
+void Keyboard::epilogoue()
+{
+	// Print key to screen
+	if (!specialStuff(m_key)) 
+	{
+		kout << m_key.ascii();
+		kout.flush();
+	}
+}
 
 bool Keyboard::specialStuff(Key &key)
 {

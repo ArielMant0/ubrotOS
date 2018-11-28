@@ -271,11 +271,7 @@ void Application::action()
     g_cpu.enable_int();
     while(true)
     {
-        g_cpu.disable_int();
         g_clock.trigger();
-        g_cpu.enable_int();
-        // Handle queued interrupts
-        for (int i = 0; i < 1000; i++) {}
     }
 }
 
