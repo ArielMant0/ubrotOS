@@ -268,10 +268,17 @@ bool Application::test_keyboard()
 
 void Application::action() 
 {
+    int count = 0;
+    int x,y;
+
     g_cpu.enable_int();
     while(true)
     {
-        g_clock.trigger();
+        g_cga.getpos(x,y);
+        g_cga.setpos(0,0);
+        kout << "stuff";
+        kout.flush();
+        g_cga.setpos(x,y);
     }
 }
 

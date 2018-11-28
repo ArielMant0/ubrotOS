@@ -52,7 +52,7 @@ public:
 	 */
 	const int keyboard = 33;
 
-	const static int GATE_NUM = 244;
+	const static int GATE_NUM = 64;
 
 	Gate *m_gates[GATE_NUM];
     

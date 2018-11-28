@@ -12,6 +12,7 @@
 /* INCLUDES */
 #include "device/cgastr.h"
 #include "machine/plugbox.h"
+#include "guard/guard.h"
 
 extern CGA_Stream kout;
 
@@ -28,9 +29,13 @@ void guardian (unsigned int slot)
 	{
 
 		Gate g = g_plugbox.report(slot)
-		if (g.prologue())
+		if (g_guard.avail())
 		{
-			g_guard.relay(&g);
+			g_guard.enter();
+			if (g.prologue())
+			{
+				g_guard.relay(&g);
+			}
 		}
 	}
 	else

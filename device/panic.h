@@ -25,8 +25,6 @@ public:
     Panic () {}
 
 	bool prologoue() override;
-
-	void epilogoue() override;
 };
 
 extern Panic g_panic;

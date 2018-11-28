@@ -18,16 +18,23 @@ Guard g_guard;
 void Guard::leave()
 {
 	retne();
+	// Call all epilogues currently in the queue
+	Gate *gate = nullptr;
+	while ((gate = m_queue.dequeue()) != nullptr)
+	{
+		gate->epilogue();
+	}
 }
 
 void Guard::relay(Gate *item)
 {
 	if (avail())
 	{
-		m_queue.enqueue(item);
-	}
-	else
-	{
 		item->epilogue();
+	}
+	else if (!item->queued())
+	{
+		m_queue.enqueue(item);
+		item->queued(true);
 	}
 }

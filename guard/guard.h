@@ -16,6 +16,7 @@
 
 #include "object/queue.h"
 #include "guard/gate.h"
+#include "guard/locker.h"
         
 class Guard : public Locker
 {

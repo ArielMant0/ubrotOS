@@ -16,13 +16,10 @@ Panic g_panic;
 
 bool Panic::prologue()
 {
-	return true;
-}
-
-void Panic::epilogue()
-{
 	// Print some kind of error message
 	kout << "Panic Trigger" << endl;
 	// Halt the CPU
 	g_cpu.halt();
+
+	return false;
 }
