@@ -262,7 +262,7 @@ void Keyboard_Controller::get_ascii_code ()
 //                      maximale Geschwindigkeit eingestellt.
 
 Keyboard_Controller::Keyboard_Controller () : 
-    ctrl_port (0x64), data_port (0x60)
+    ctrl_port (0x64), data_port (0x60), leds(0)
 {
     // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
     set_led (led::caps_lock, false);
