@@ -48,7 +48,7 @@ void Keyboard::trigger()
 
 void Keyboard::checkInvalidKeys(Key &key) 
 {
-	if (key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left())
+	if (key.shift() || key.scancode() == Key::scan::del && key.alt_left() && key.ctrl_left())
 	{
 		reboot();
 	}
@@ -79,6 +79,7 @@ bool Keyboard::specialStuff(Key &key)
 		}
 		case '1':
 		{
+    		kout << "leds " << endl;
 			set_led(1, true);
 			break;
 		}
@@ -89,7 +90,7 @@ bool Keyboard::specialStuff(Key &key)
 		}
 		case '3':
 		{
-			set_led(3, true);
+			set_led(4, true);
 			break;
 		}
 		case '4':
@@ -104,7 +105,7 @@ bool Keyboard::specialStuff(Key &key)
 		}
 		case '6':
 		{
-			set_led(3, false);
+			set_led(4, false);
 			break;
 		}
 		default: break;

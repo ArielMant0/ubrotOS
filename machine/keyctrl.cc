@@ -282,22 +282,22 @@ Keyboard_Controller::Keyboard_Controller () :
 
 Key Keyboard_Controller::key_hit ()
 {
-    // Key key;  // nicht explizit initialisierte Tasten sind ungueltig
+    Key key;
     // Read code
     code = data_port.inb();
 
     // Decode scan code
-    // if (!key_decoded())
-    // {
-    //     return gather; // invalid
-    // }
+    if (!key_decoded())
+    {
+        key.modifier(gather.modifier());
+        return key;
+    }
 
-    // key.ascii(gather.ascii());
-    // key.scancode(gather.scancode());
+    key.modifier(gather.modifier());
+    key.ascii(gather.ascii());
+    key.scancode(gather.scancode());
 
-    key_decoded();
-
-    return gather;
+    return key;
 }
 
 // REBOOT: Fuehrt einen Neustart des Rechners durch. Ja, beim PC macht
@@ -356,7 +356,6 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
         delay = 0;
     }
 
-    // TODO: error handling for wrong values
     if (write_command(kbd_cmd::set_speed))
     {
         m_repeat_speed = speed;
@@ -380,10 +379,12 @@ void Keyboard_Controller::set_led (char led, bool on)
         g_pic.forbid(keyboard);
     }
     
+    //g_cga.show(0,0, '!');
     // TODO: error handling for wrong values
     if (write_command(kbd_cmd::set_led))
     {
         leds = on ? (leds | led) : (leds ^ led);
+        //g_cga.show(0,0, leds-'0');
         // Write data byte to data port
         write_command(leds);
     }
@@ -424,11 +425,10 @@ bool Keyboard_Controller::write_command(int cmd)
     counter = 0;
     bool ack = false;
     // Read ACK data byte
-    while (counter++ < MAX_WAIT)
+    while (counter++ < MAX_WAIT && !ack)
     {
         if (data_port.inb() == kbd_reply::ack)
         {
-            break;
             ack = true;
         }
     }

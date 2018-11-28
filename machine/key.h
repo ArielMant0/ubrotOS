@@ -52,6 +52,8 @@ public:
     // ASCII, SCANCODE: Setzen und Abfragen von Ascii und Scancode
     void ascii (unsigned char a) { asc = a; }
     void scancode (unsigned char s) { scan = s; }
+    void modifier(unsigned char m) { modi = m; }
+    unsigned char modifier() { return modi; }
     unsigned char ascii () { return asc; }
     unsigned char scancode () { return scan; }
 
