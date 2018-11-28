@@ -73,11 +73,12 @@ private:
    bool write_command(int cmd);
 
 
-public:
+protected:
     // Store current repeat rate setting for easier manipulation
     char m_repeat_speed;
     char m_repeat_delay;
 
+public:
     // KEYBOARD_CONTROLLER: Initialisierung der Tastatur: alle LEDs werden
     //                      ausgeschaltet und die Wiederholungsrate auf
     //                      maximale Geschwindigkeit eingestellt.
