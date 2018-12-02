@@ -24,7 +24,7 @@ public:
 
     Panic () {}
 
-	bool prologoue() override;
+	bool prologue() override;
 };
 
 extern Panic g_panic;

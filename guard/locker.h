@@ -22,7 +22,7 @@ class Locker
 {
 private:
 
-	bool n_locked;
+	bool m_locked;
 
     Locker(const Locker &copy); // Verhindere Kopieren
 
@@ -36,6 +36,7 @@ public:
 		{
 			kout << "Lock already active" << endl;
 			g_cpu.halt();
+			return;
 		}
 		m_locked = true;
 	}
@@ -46,13 +47,14 @@ public:
 		{
 			kout << "Lock already inactive" << endl;
 			g_cpu.halt();
+			return;
 		}
 		m_locked = false;
 	}
 
 	bool avail()
 	{
-		return m_locked;
+		return !m_locked;
 	}
 };
 

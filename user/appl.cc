@@ -13,32 +13,31 @@
 #include "user/appl.h"
 #include "device/cgastr.h"
 #include "device/keyboard.h"
-#include "device/clock.h"
 
 #include "machine/cpu.h" // TODO
-         
+
 /* GLOBALE VARIABLEN */
 
 extern CGA_Stream kout; // TODO
 
-const char TEST_RESULT1[] = 
-{ 
+const char TEST_RESULT1[] =
+{
     "s1g-487\n"
 };
-const char TEST_RESULT2[] = 
-{ 
+const char TEST_RESULT2[] =
+{
     "-1 487 -123459876 1"
 };
-const char TEST_RESULT3[] = 
-{ 
+const char TEST_RESULT3[] =
+{
     "2 10 11101001 -23\n"
 };
-const char TEST_RESULT4[] = 
-{ 
+const char TEST_RESULT4[] =
+{
     "8 10 351 -23\n"
 };
-const char TEST_RESULT5[] = 
-{ 
+const char TEST_RESULT5[] =
+{
     "10 A E9 -23\n"
 };
 
@@ -127,7 +126,7 @@ bool Application::test_o_stream()
         }
     }
 
-    return true;    
+    return true;
 }
 
 bool Application::test_cga_stream()
@@ -202,10 +201,10 @@ bool Application::test_cga_stream()
 
     return true;
 }
-      
-bool Application::test_keyboard() 
+
+bool Application::test_keyboard()
 {
-    CGA_Screen &cga = kout.screen();
+    CGA_Screen &cga = g_cga;
     Keyboard_Controller keyboard;
 
     // capslock = 4, numlock = 2, scrolllock = 1
@@ -244,12 +243,12 @@ bool Application::test_keyboard()
             {
                 cga.clear();
                 kout.flush();
-                
+
                 for(int i = 0;; ++i)
                 {
                     if (key.ascii() == '1' || key.ascii() == '2' || key.ascii() == '3')
                         break;
-                                
+
                     key.invalidate();
                     key = keyboard.key_hit();
                     if (key.valid())
@@ -266,7 +265,8 @@ bool Application::test_keyboard()
     return true;
 }
 
-void Application::action() 
+
+void Application::action()
 {
     int count = 0;
     int x,y;
@@ -275,10 +275,14 @@ void Application::action()
     while(true)
     {
         g_cga.getpos(x,y);
-        g_cga.setpos(0,0);
-        kout << "stuff";
+        g_cga.setpos(75,0);
+        kout << count++;
         kout.flush();
         g_cga.setpos(x,y);
+
+        if (count >= 10000) {
+            count = 0;
+        }
     }
 }
 

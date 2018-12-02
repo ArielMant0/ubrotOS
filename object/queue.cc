@@ -22,10 +22,11 @@
 /*****************************************************************************/
 
 #include "object/queue.h"
+#include "guard/secure.h"
 
 // ENQUEUE: Das angegebene Element wird an das Ende der Liste angefuegt.
 void Queue::enqueue (Chain* item)
-{ 
+{
 	item->next = 0;       // Das neue Element besitzt noch keinen Nachfolger.
    	*tail = item;         // Das Element an das Ende der Liste anfuegen
    	tail = &(item->next); // und den tail Zeiger aktualisieren.
@@ -41,12 +42,15 @@ Chain* Queue::dequeue ()
    	item = head;             // Der head Zeiger bezeichnet das erste Element.
    	if (item)                // oder Null, wenn die Liste leer ist.
 	{
+		Secure lock;		 // Lock this scope
 	  	head = item->next;   // Das erste Element aus der Liste ausklinken.
-	  	if (!head)           // Wenn die Liste nun leer ist, muss der tail
+	  	if (!head) {         // Wenn die Liste nun leer ist, muss der tail
 			tail = &head;    // Zeiger wieder auf den head verweisen.
-	  	else                 // sonst nur noch
+		} else {             // sonst nur noch
 			item->next = 0;  // den Eintrag ueber den Nachfolger loeschen.
+		}
 	}
+
    	return item;
 }
 
@@ -58,21 +62,23 @@ void Queue::remove (Chain* item)
    	if (head)
 	{
 	  	cur = head;            // Die Suche beginnt am Kopf der Liste.
-	  	if (item == cur)       // Wenn das erste Element bereits das gesuchte
+	  	if (item == cur) {     // Wenn das erste Element bereits das gesuchte
 			dequeue ();        // ist, genuegt dequeue zum Entfernen.
-	  	else
-	   	{
-	 		while (cur->next && item != cur->next)  // Suchen, bis das Ende der
+		} else {
+			// Suchen, bis das Ende der Lister erreicht oder Element gefunden wurde
+	 		while (cur->next && item != cur->next)
 	 		{
-	 			cur = cur->next;                    // Liste erreicht oder das
-	   		}                                     	// naechste Element das
+	 			cur = cur->next;
+	   		}
 	 		if (cur->next)
 	  		{
+				Secure lock;			  // Lock this scope
 				cur->next = item->next;   // Das Element aus der Liste ausklinken.
 				item->next = 0;      	  // Den Eintrag ueber den Nachfolger loeschen.
 
-				if (!cur->next)           // Wenn cur jetzt keinen Nachfolger hat,
+				if (!cur->next) {         // Wenn cur jetzt keinen Nachfolger hat,
 		  			tail = &(cur->next);  // muss tail aktualisiert werden.
+				}
 	  		}
 	   	}
 	}

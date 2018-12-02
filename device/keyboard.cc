@@ -32,13 +32,13 @@ bool Keyboard::prologue()
 	// Get Key
 	m_key = key_hit();
 	// If its a valid key, do the epilogue
-	return m_key.valid();
+	return !queued(); //m_key.valid();
 }
 
-void Keyboard::epilogoue()
+void Keyboard::epilogue()
 {
 	// Print key to screen
-	if (!specialStuff(m_key)) 
+	if (!specialStuff(m_key))
 	{
 		kout << m_key.ascii();
 		kout.flush();

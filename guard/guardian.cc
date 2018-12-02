@@ -23,23 +23,13 @@ extern "C" void guardian (unsigned int slot);
 
 void guardian (unsigned int slot)
 {
-	// hier ausgabe hin packen
-	if (slot == (unsigned int) g_plugbox.keyboard || 
-		slot == (unsigned int) g_plugbox.timer)
+	g_cpu.enable_int();
+	// Get assigned interrupt jandler
+	Gate *g = &g_plugbox.report(slot);
+	// Call its prologue
+	if (g->prologue())
 	{
-
-		Gate g = g_plugbox.report(slot)
-		if (g_guard.avail())
-		{
-			g_guard.enter();
-			if (g.prologue())
-			{
-				g_guard.relay(&g);
-			}
-		}
-	}
-	else
-	{
-		kout << "Interrupt " << slot << " detected" << endl;
+		// Request corresponding epilogue
+		g_guard.relay(g);
 	}
 }

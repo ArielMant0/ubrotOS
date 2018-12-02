@@ -15,15 +15,8 @@
 
 CGA_Stream kout;
 
-CGA_Stream::CGA_Stream() : O_Stream() {}
-
 void CGA_Stream::flush()
 {
-    g_cga.print(m_buffer, m_pos);   
+    g_cga.print(m_buffer, m_pos);
     O_Stream::flush();
-}
-
-CGA_Screen& CGA_Stream::screen()
-{
-	return g_cga;
 }

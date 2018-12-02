@@ -21,11 +21,9 @@ class CGA_Stream : public O_Stream
 {
 public:
 
-    CGA_Stream();
+    CGA_Stream() : O_Stream() {}
 
     void flush() override;
-
-    CGA_Screen& screen();
 
 private:
 

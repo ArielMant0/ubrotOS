@@ -55,8 +55,9 @@ ASM = nasm
 QEMU ?= qemu-system-x86_64
 CC ?= gcc
 CXX ?= g++
-CFLAGS := $(CFLAGS) -m64 -Wall -Wno-write-strings -fno-stack-protector -nostdlib -I. -g #-DDEBUG
-CXXFLAGS := $(CFLAGS) -std=c++11 -Wno-non-virtual-dtor -fno-threadsafe-statics -fno-use-cxa-atexit -fno-rtti -fno-exceptions
+WFLAGS := -Wint-to-pointer-cast
+CFLAGS := $(CFLAGS) -m64 -Wall $(WFLAGS) -Wno-write-strings -fno-stack-protector -nostdlib -I. -g #-DDEBUG
+CXXFLAGS := $(CFLAGS) -std=c++11 $(WFLAGS) -Wno-non-virtual-dtor -fno-threadsafe-statics -fno-use-cxa-atexit -fno-rtti -fno-exceptions
 
 ifneq ($(shell which grub-mkrescue 2> /dev/null),)
 MKRESCUE = grub-mkrescue

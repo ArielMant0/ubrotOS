@@ -11,6 +11,8 @@
 #ifndef __Gate_include__
 #define __Gate_include__
 
+#include "object/chain.h"
+
 class Gate : public Chain
 {
 
