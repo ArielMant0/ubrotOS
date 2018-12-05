@@ -22,7 +22,7 @@
 /*****************************************************************************/
 
 #include "object/queue.h"
-#include "guard/secure.h"
+#include "machine/cpu.h"
 
 // ENQUEUE: Das angegebene Element wird an das Ende der Liste angefuegt.
 void Queue::enqueue (Chain* item)
@@ -42,13 +42,14 @@ Chain* Queue::dequeue ()
    	item = head;             // Der head Zeiger bezeichnet das erste Element.
    	if (item)                // oder Null, wenn die Liste leer ist.
 	{
-		Secure lock;		 // Lock this scope
+		g_cpu.disable_int(); // Disable all interrupts
 	  	head = item->next;   // Das erste Element aus der Liste ausklinken.
 	  	if (!head) {         // Wenn die Liste nun leer ist, muss der tail
 			tail = &head;    // Zeiger wieder auf den head verweisen.
 		} else {             // sonst nur noch
 			item->next = 0;  // den Eintrag ueber den Nachfolger loeschen.
 		}
+		g_cpu.enable_int();
 	}
 
    	return item;
@@ -72,13 +73,15 @@ void Queue::remove (Chain* item)
 	   		}
 	 		if (cur->next)
 	  		{
-				Secure lock;			  // Lock this scope
+				g_cpu.disable_int();	  // Disable all interrupts
 				cur->next = item->next;   // Das Element aus der Liste ausklinken.
 				item->next = 0;      	  // Den Eintrag ueber den Nachfolger loeschen.
 
 				if (!cur->next) {         // Wenn cur jetzt keinen Nachfolger hat,
 		  			tail = &(cur->next);  // muss tail aktualisiert werden.
 				}
+				g_cpu.enable_int();
+
 	  		}
 	   	}
 	}

@@ -21,7 +21,7 @@ void Guard::leave()
 	retne();
 	// Current interrupt handler
 	Gate *gate = nullptr;
-	// Call all epilogues currently in the queue
+	// Run all epilogues currently in the queue
 	while (avail() && (gate = (Gate*)m_queue.dequeue()) != nullptr)
 	{
 		gate->epilogue();
