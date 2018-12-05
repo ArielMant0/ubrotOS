@@ -422,8 +422,9 @@ bool Keyboard_Controller::write_command(int cmd)
 
     counter = 0;
     bool ack = false;
+    g_cga.show(50, 5, 'A');
     // Read ACK data byte
-    while (counter++ < 100)
+    while (true || counter++ < 100) // TODO: why des this not terminate
     {
         if (data_port.inb() == kbd_reply::ack)
         {
@@ -431,6 +432,7 @@ bool Keyboard_Controller::write_command(int cmd)
             break;
         }
     }
+    g_cga.show(50, 5, 'B');
 
     return ack;
 }
