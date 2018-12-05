@@ -13,6 +13,8 @@
 #include "user/appl.h"
 #include "device/cgastr.h"
 #include "device/keyboard.h"
+#include "guard/secure.h"
+
 
 #include "machine/cpu.h" // TODO
 
@@ -274,15 +276,18 @@ void Application::action()
     g_cpu.enable_int();
     while(true)
     {
-        g_cga.getpos(x,y);
-        g_cga.setpos(75,0);
-        kout << count++;
-        kout.flush();
-        g_cga.setpos(x,y);
-
-        if (count >= 10000) {
-            count = 0;
+        {
+            Secure lock;         // Lock this scope
+            g_cga.getpos(x,y);
+            g_cga.setpos(75,0);
+            kout << count++%100000;
+            kout.flush();
+            g_cga.setpos(x,y);
         }
+
+        //if (count >= 10000) {
+        //    count = 0;
+        //}
     }
 }
 

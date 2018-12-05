@@ -19,9 +19,10 @@ void Guard::leave()
 {
 	// Call all epilogues currently in the queue
 	Gate *gate = nullptr;
-	while (avail() && (gate = (Gate*)m_queue.dequeue()) != nullptr)
+	while ((gate = (Gate*)m_queue.dequeue()) != nullptr)
 	{
 		gate->epilogue();
+		gate->queued(false);
 	}
 	// Leave epilogue plane
 	retne();
@@ -29,11 +30,10 @@ void Guard::leave()
 
 void Guard::relay(Gate *item)
 {
-	// If we can gp to the epilogue plane, do it
+	// If there are no other E_1 functions
 	if (avail())
 	{
 		item->epilogue();
-
 	}
 	// Otherwise queue the interrupt handler
 	else if (!item->queued())

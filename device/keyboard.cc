@@ -32,7 +32,7 @@ bool Keyboard::prologue()
 	// Get Key
 	m_key = key_hit();
 	// If its a valid key, do the epilogue
-	return !queued(); //m_key.valid();
+	return m_key.valid();
 }
 
 void Keyboard::epilogue()
