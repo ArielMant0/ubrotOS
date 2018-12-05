@@ -20,7 +20,6 @@ extern "C" void guardian (unsigned int slot);
 
 void guardian (unsigned int slot)
 {
-	g_cpu.enable_int();
 	// Get assigned interrupt jandler
 	Gate *g = &g_plugbox.report(slot);
 	// Call its prologue

@@ -12,21 +12,29 @@
 /*****************************************************************************/
 
 #include "guard/guard.h"
+#include "machine/cpu.h"
 
 Guard g_guard;
 
 void Guard::leave()
 {
-	// Unlock again
-	retne();
 	// Current interrupt handler
 	Gate *gate = nullptr;
 	// Run all epilogues currently in the queue
-	while (avail() && (gate = (Gate*)m_queue.dequeue()) != nullptr)
+	while (true)
 	{
+		g_cpu.disable_int();
+		gate = (Gate*)m_queue.dequeue();
+		g_cpu.enable_int();
+		if (gate == nullptr) {
+			break;
+		}
+
 		gate->epilogue();
 		gate->queued(false);
 	}
+	// Unlock again
+	retne();
 }
 
 void Guard::relay(Gate *item)
@@ -34,7 +42,10 @@ void Guard::relay(Gate *item)
 	// If we can immediately run the epilogue, do so
 	if (avail())
 	{
+		g_cpu.enable_int();
+		enter();
 		item->epilogue();
+		retne();
 	}
 	// Otherwise queue the epilogue (interrupt handler)
 	else if (!item->queued())
