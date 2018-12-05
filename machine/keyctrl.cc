@@ -73,7 +73,7 @@ bool Keyboard_Controller::key_decoded ()
     // AT Tastatur hinzugekommen sind, senden immer erst eines von zwei
     // moeglichen Prefix Bytes.
     if (code == prefix1 || code == prefix2)
-    { 
+    {
         prefix = code;
         return false;
     }
@@ -87,7 +87,7 @@ bool Keyboard_Controller::key_decoded ()
                                // Make Code mit gesetzten break_bit.
         switch (code)
 	    {
-	        case 42:  
+	        case 42:
 	        case 54:
 	            gather.shift (false);
 	            break;
@@ -211,7 +211,7 @@ void Keyboard_Controller::get_ascii_code ()
     else if (gather.num_lock () && !prefix && code>=71 && code<=83)
 	{
 	    // Bei eingeschaltetem NumLock und der Betaetigung einer der
-	    // Tasten des separaten Ziffernblocks (Codes 71-83), sollen 
+	    // Tasten des separaten Ziffernblocks (Codes 71-83), sollen
 	    // nicht die Scancodes der Cursortasten, sondern ASCII und
 	    // Scancodes der ensprechenden Zifferntasten geliefert werden.
 	    // Die Tasten des Cursorblocks (prefix == prefix1) sollen
@@ -231,9 +231,9 @@ void Keyboard_Controller::get_ascii_code ()
 	    gather.ascii (shift_tab[code]);
 	    gather.scancode (code);
 	}
-    // Die Umschaltung soll nur bei Buchstaben gelten 
+    // Die Umschaltung soll nur bei Buchstaben gelten
     else if (gather.caps_lock ())
-	{  
+	{
 	    if ((code>=16 && code<=26) || (code>=30 && code<=40) || (code>=44 && code<=50))
 	    {
 		    gather.ascii (shift_tab[code]);
@@ -257,7 +257,7 @@ void Keyboard_Controller::get_ascii_code ()
 // KEYBOARD_CONTROLLER: Initialisierung der Tastatur: alle LEDs werden
 //                      ausgeschaltet und die Wiederholungsrate auf
 //                      maximale Geschwindigkeit eingestellt.
-Keyboard_Controller::Keyboard_Controller () : 
+Keyboard_Controller::Keyboard_Controller () :
     leds(0), ctrl_port (0x64), data_port (0x60)
 {
     // alle LEDs ausschalten (bei vielen PCs ist NumLock nach dem Booten an)
@@ -309,9 +309,9 @@ void Keyboard_Controller::reboot ()
 
     // Der Tastaturcontroller soll das Reset ausloesen.
     do
-    { 
+    {
         // warten, bis das letzte Kommando
-        status = ctrl_port.inb ();      
+        status = ctrl_port.inb ();
     } while ((status & inpb) != 0);   // verarbeitet wurde.
     ctrl_port.outb (cpu_reset);       // Reset
 }
@@ -328,25 +328,25 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
 {
     bool enabled = !g_pic.is_masked(keyboard);
 
-    if (enabled) 
+    if (enabled)
     {
         g_pic.forbid(keyboard);
     }
 
-    if (speed > 20) 
+    if (speed > 20)
     {
         speed = 20;
-    } 
-    else if (speed < 0) 
+    }
+    else if (speed < 0)
     {
         speed = 0;
     }
 
-    if (delay > 3) 
+    if (delay > 3)
     {
         delay = 3;
-    } 
-    else if (delay < 0) 
+    }
+    else if (delay < 0)
     {
         delay = 0;
     }
@@ -358,7 +358,7 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
         write_command(m_repeat_delay | m_repeat_speed);
     }
 
-    if (enabled) 
+    if (enabled)
     {
         g_pic.allow(keyboard);
     }
@@ -369,7 +369,7 @@ void Keyboard_Controller::set_led (char led, bool on)
 {
     bool enabled = !g_pic.is_masked(keyboard);
 
-    if (enabled) 
+    if (enabled)
     {
         g_pic.forbid(keyboard);
     }
@@ -386,8 +386,8 @@ void Keyboard_Controller::set_led (char led, bool on)
         // Write data byte to data port
         write_command(leds);
     }
- 
-    if (enabled) 
+
+    if (enabled)
     {
         g_pic.allow(keyboard);
     }
@@ -423,11 +423,12 @@ bool Keyboard_Controller::write_command(int cmd)
     counter = 0;
     bool ack = false;
     // Read ACK data byte
-    while (counter++ < MAX_WAIT && !ack)
+    while (counter++ < 100)
     {
         if (data_port.inb() == kbd_reply::ack)
         {
             ack = true;
+            break;
         }
     }
 
