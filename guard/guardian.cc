@@ -10,11 +10,8 @@
 /*****************************************************************************/
 
 /* INCLUDES */
-#include "device/cgastr.h"
 #include "machine/plugbox.h"
 #include "guard/guard.h"
-
-extern CGA_Stream kout;
 
 extern "C" void guardian (unsigned int slot);
 

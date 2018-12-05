@@ -17,7 +17,7 @@ Panic g_panic;
 bool Panic::prologue()
 {
 	// Print some kind of error message
-	kout << "Panic Trigger" << endl;
+	kout << "Panic Interrupt Handler" << endl;
 	// Halt the CPU
 	g_cpu.halt();
 

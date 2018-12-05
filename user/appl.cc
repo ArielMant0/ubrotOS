@@ -15,7 +15,6 @@
 #include "device/keyboard.h"
 #include "guard/secure.h"
 
-
 #include "machine/cpu.h" // TODO
 
 /* GLOBALE VARIABLEN */
@@ -277,10 +276,13 @@ void Application::action()
     while(true)
     {
         {
-            Secure lock;         // Lock this scope
+            Secure lock;
             g_cga.getpos(x,y);
             g_cga.setpos(75,0);
-            kout << count++%100000;
+            kout << count++;
+            if (count == 100000) {
+                count = 0;
+            }
             kout.flush();
             g_cga.setpos(x,y);
         }
