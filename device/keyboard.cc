@@ -38,7 +38,7 @@ bool Keyboard::prologue()
 void Keyboard::epilogue()
 {
 	// Print key to screen
-	if (!specialStuff(m_key))
+	if (!specialStuff(m_key) && m_key.valid())
 	{
 		kout << m_key.ascii();
 		kout.flush();

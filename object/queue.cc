@@ -42,7 +42,7 @@ Chain* Queue::dequeue ()
    	item = head;             // Der head Zeiger bezeichnet das erste Element.
    	if (item)                // oder Null, wenn die Liste leer ist.
 	{
-		//Secure lock;		 // Lock this scope
+		Secure lock;		 // Lock this scope
 	  	head = item->next;   // Das erste Element aus der Liste ausklinken.
 	  	if (!head) {         // Wenn die Liste nun leer ist, muss der tail
 			tail = &head;    // Zeiger wieder auf den head verweisen.
@@ -72,7 +72,7 @@ void Queue::remove (Chain* item)
 	   		}
 	 		if (cur->next)
 	  		{
-				//Secure lock;			  // Lock this scope
+				Secure lock;			  // Lock this scope
 				cur->next = item->next;   // Das Element aus der Liste ausklinken.
 				item->next = 0;      	  // Den Eintrag ueber den Nachfolger loeschen.
 

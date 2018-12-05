@@ -284,10 +284,6 @@ void Application::action()
             kout.flush();
             g_cga.setpos(x,y);
         }
-
-        //if (count >= 10000) {
-        //    count = 0;
-        //}
     }
 }
 

@@ -17,25 +17,26 @@ Guard g_guard;
 
 void Guard::leave()
 {
-	// Call all epilogues currently in the queue
+	// Unlock again
+	retne();
+	// Current interrupt handler
 	Gate *gate = nullptr;
-	while ((gate = (Gate*)m_queue.dequeue()) != nullptr)
+	// Call all epilogues currently in the queue
+	while (avail() && (gate = (Gate*)m_queue.dequeue()) != nullptr)
 	{
 		gate->epilogue();
 		gate->queued(false);
 	}
-	// Leave epilogue plane
-	retne();
 }
 
 void Guard::relay(Gate *item)
 {
-	// If there are no other E_1 functions
+	// If we can immediately run the epilogue, do so
 	if (avail())
 	{
 		item->epilogue();
 	}
-	// Otherwise queue the interrupt handler
+	// Otherwise queue the epilogue (interrupt handler)
 	else if (!item->queued())
 	{
 		item->queued(true);
