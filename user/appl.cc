@@ -273,6 +273,7 @@ void Application::action()
     int x,y;
 
     g_cpu.enable_int();
+    
     while(true)
     {
         {

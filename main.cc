@@ -2,13 +2,11 @@
 
 #include "user/appl.h"
 
+int stack[256];
+
 int main()
 {
-    Application app;
-    //if (!app.test())
-    //{
-    //    return -1;
-    //}
+    Application app((void*)stack); // TODO: where does stack start?
 
     app.action();
 
