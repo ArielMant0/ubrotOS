@@ -30,7 +30,8 @@ void Scheduler::ready(Entrant& that)
 void Scheduler::schedule()
 {
 	Chain* tmp = readyList.dequeue();
-	((Entrant*)tmp)->resume(); // TODO soll das hier go sein?
+	dispatch((Entrant*)tmp);
+	//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
 }
 
 /*
@@ -40,9 +41,10 @@ void Scheduler::schedule()
  */
 void Scheduler::exit()
 {
-	// TODO unterschied zu schedule?
+	// TODO was ist hier der unterschied zu schedule?
 	Chain* tmp = readyList.dequeue();
-	((Entrant*)tmp)->resume(); // TODO soll das hier go sein?
+	dispatch((Entrant*)tmp);
+	//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
 }
 
 /*
@@ -64,8 +66,8 @@ void Scheduler::kill(Entrant& that)
  */
 void Scheduler::resume()
 {
-	// Füge laufenden hinzu TODO woher bekomme ich den laufenden?
-	readyList.enqueue(that);
+	// Füge laufenden hinzu
+	readyList.enqueue(active());
 
 	// Entferne ersten und führe aus
 	Chain* tmp = readyList.dequeue();

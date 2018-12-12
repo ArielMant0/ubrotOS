@@ -19,7 +19,7 @@ class Entrant : public Coroutine, public Chain
 /* Hier muesst ihr selbst Code vervollstaendigen */         
 {
 private:
-    Entrant (const Entrant &copy); // Verhindere Kopieren
+    Entrant(const Entrant &copy); // Verhindere Kopieren
 /* Hier muesst ihr selbst Code vervollstaendigen */
 public:
 	Entrant(void *tos)

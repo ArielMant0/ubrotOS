@@ -16,7 +16,7 @@
 #include "object/queue.h"
 #include "thread/entrant.h"
 
-class Scheduler 
+class Scheduler : public Dispatcher
 /* Hier muesst ihr selbst Code vervollstaendigen */         
 {
 private:
