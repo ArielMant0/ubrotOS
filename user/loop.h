@@ -17,10 +17,11 @@
         
 class Loop : public Entrant
 {
+
+	int m_x, m_y;
+
 public:
-	Loop(void* tos) : Entrant(tos)
-	{
-	} 
+	Loop (void* tos, int x, int y) : Entrant(tos), m_x(x), m_y(y) {} 
 
 	void action() override;
 };

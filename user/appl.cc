@@ -21,58 +21,42 @@
 
 void Application::action()
 {
-    
-    //int count = 0;
-    //int x,y;
-    g_cga.show(50, 5, 'A');
-    
-    kout << "endl" << endl;
-
-    g_cpu.enable_int();
-    /*
-    while(true)
     {
-        {
-            Secure lock;
-            g_cga.getpos(x,y);
-            g_cga.setpos(75,0);
-            kout << count++;
-            if (count == 100000) {
-                count = 0;
-            }
-            kout.flush();
-            g_cga.setpos(x,y);
-        }
-    }*/
-    kout << "endl" << endl;
+        Secure lock;
+        g_cga.clear();
+    }
+    
+    g_cpu.enable_int();
 
-    // andere Prozesse go!
+    // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack1[256];
-    Loop p1((void*)(stack1 + sizeof (stack1)));
-    // gebe dem scheduler den thread
+    Loop p1((void*)(stack1 + sizeof (stack1)), 75, 0);
     g_scheduler.ready(p1);
 
+    // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack2[256];
-    Loop p2((void*)(stack2 + sizeof (stack2)));
-    // gebe dem scheduler den thread
+    Loop p2((void*)(stack2 + sizeof (stack2)), 0, 0);
     g_scheduler.ready(p2);
 
-    kout << "endl" << endl;
 
-    int counter = 0;
-    while (true) {
-        
-        // Wenn counter den Wert erreicht, beende Loop2
-        counter++;
-        if (counter == 1000) {
+    int x, y, counter = 0;
+    while (true)
+    {
+        // beende p2
+        if (counter++ == 1000) 
+        {
             g_scheduler.kill(p2);
         }
         
-        // Ausgabe von Main mit Counter
+        // Verwende lock aus einer der vorherigen Aufgaben
         {
-            Secure secure;
-            kout << "Main - Counter: " << counter;
-            kout.flush();
+            Secure lock;
+
+            g_cga.getpos(x,y);
+            g_cga.setpos(0,10);
+            kout << "Counter in Appl " << counter << endl;
+
+            g_cga.setpos(x,y);
         }
 
         g_scheduler.resume();

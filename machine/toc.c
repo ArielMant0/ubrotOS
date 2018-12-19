@@ -24,19 +24,27 @@ void toc_settle(
 	void *object
 ) 
 {
-	// initialisiere die Elemente mit 0
+	// initialisiere die Struct-Elemente mit 0
 	regs->rbx = 0;
 	regs->r12 = 0;
 	regs->r13 = 0;
 	regs->r14 = 0;
 	regs->r15 = 0;
 
-	void **stack = tos; // pointer auf stack
-	*(stack-1) = kickoff;
-	*(stack-2) = object;
+	// Erzeuge Pointer auf stack
+	// Stack wächs von großen Adressen zu kleinen
+	// Oberstes Element liegt immer bei der größten Adresse
+	// top 
+	// [object, -, kickoff] 
+	// bottom
+	// TODO Rücksprungadresse beschreiben
+	void **stack = tos; 
+	*(stack-1) = object; 
+	*(stack-3) = kickoff;
 
-	regs->rbp = *(stack-2);
-	regs->rsp = *(stack-1);
+	// Setze Stackpointer auf das unterste Stackelement
+	regs->rbp = stack-1;
+	regs->rsp = stack-3;
 }
 
 

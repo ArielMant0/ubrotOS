@@ -15,25 +15,31 @@
 
 #include "device/cgastr.h"
 #include "guard/secure.h"
-
+#include "thread/scheduler.h"
  
+
+
+
 void Loop::action()
 {
-    int count = 0;
     int x,y;
-
-    while(true)
+    for (int count = 0; count < 100000; count++)
     {
         {
             Secure lock;
             g_cga.getpos(x,y);
-            g_cga.setpos(75,0);
+            g_cga.setpos(m_x,m_y);
+
             kout << count++;
-            if (count == 10000) {
-                count = 0;
-            }
+
             kout.flush();
             g_cga.setpos(x,y);
         }
+        // Wait a bit
+        for (int i = 0; i < 500; ++i) {}
+
+        g_scheduler.resume();
     }
+
+    g_scheduler.exit();
 }

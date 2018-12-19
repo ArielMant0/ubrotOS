@@ -25,7 +25,6 @@ extern "C"
 {
  	void toc_go(struct toc* regs);
 	void toc_switch(struct toc* regs_now, struct toc* reg_then);
-	//void toc_settle(struct toc*, void*, void (*func)(void*), void*);
 	void toc_settle(
 		struct toc*, void*, 
 		void (*func)(void*, void*, void*, void*, void*, void*, void*), 
@@ -35,29 +34,26 @@ extern "C"
 
 extern void kickoff(void*, void*, void*, void*, void*, void*, void*);
 
+/**
+ * Konstruktor
+ */
 Coroutine::Coroutine(void *tos)
 {
 	m_toc = toc();
 
-	g_cga.show(50, 5, 'A');
-    
-    kout << "endl" << endl;
-	// let stack pointer point to tos
-	toc_settle(&m_toc, tos, kickoff, this); // kickoff ?
-
-	g_cga.show(55, 5, 'A');
-    
-    //kout << "endl" << endl;
+	// Init den Stack
+	toc_settle(&m_toc, tos, kickoff, this);
 }
 
 void Coroutine::go()
 {
-	// übergebe Pointer auf die Adresse
+	// übergebe Pointer auf die Adresse des tocs
+	// mit extern c angesprochen
 	toc_go(&m_toc);
 }
 
 void Coroutine::resume(Coroutine &next)
 {
-	// coroutine-switch
-	toc_switch(&m_toc, &next.m_toc);
+	// Tausche den Inhalt der Register
+	toc_switch(&m_toc, &(next.m_toc));
 }

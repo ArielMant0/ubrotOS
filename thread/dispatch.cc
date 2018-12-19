@@ -28,6 +28,7 @@ void Dispatcher::go(Coroutine& first)
 	// Wenn nullptr
 	if(!lifePointer)
 	{
+		// dann setze die Coroutine und führe sie aus
     	lifePointer = &first;
     	lifePointer->go();
 	}
@@ -37,14 +38,14 @@ void Dispatcher::go(Coroutine& first)
 // vom alten zum neuen Life-Pointer durch.
 void Dispatcher::dispatch(Coroutine& next)
 {
+	// Speichere aktuelle Coroutine
 	Coroutine* now = lifePointer;
-
+	// Selecte neue Coroutine
 	lifePointer = &next;
-	// TODO soll das hier go sein?
 	now->resume(next);
 }
  
-// Hiermit kann abgefragt werden, welche Koroutine gerade im Besitz des Prozessors ist.    
+// Hiermit kann abgefragt werden, welche Coroutine gerade im Besitz des Prozessors ist.    
 Coroutine* Dispatcher::active()
 {
     return lifePointer;

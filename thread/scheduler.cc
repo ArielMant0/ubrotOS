@@ -8,13 +8,10 @@
 /* Implementierung des Schedulers.                                           */
 /*****************************************************************************/
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
 #include "scheduler.h"
 
 Scheduler g_scheduler;
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
 
 /*
  * Mit dieser Methode wird der Prozess that beim Scheduler angemeldet. 
@@ -32,9 +29,11 @@ void Scheduler::ready(Entrant& that)
 void Scheduler::schedule()
 {
 	// Frage den dispatcher ob nullptr vorliegt
-	if (!active()) {
+	if (!active()) 
+	{
 		Entrant* tmp = (Entrant*)readyList.dequeue();
-		if (tmp) {
+		if (tmp) 
+		{
 			go(*tmp);
 		}
 		//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
@@ -49,11 +48,11 @@ void Scheduler::schedule()
 void Scheduler::exit()
 {
 	// TODO was ist hier der unterschied zu schedule?
-	Chain* tmp = readyList.dequeue();
-	if (tmp) {
-		dispatch(*((Entrant*)tmp));
+	Entrant *tmp = (Entrant*)readyList.dequeue();
+	if (tmp) 
+	{
+		dispatch(*tmp);
 	}
-	//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
 }
 
 /*
@@ -64,9 +63,12 @@ void Scheduler::exit()
 void Scheduler::kill(Entrant& that)
 {
 	// Stelle sicher das es nicht der aktive ist
-	if (active() != &that) {
+	if (active() != &that) 
+	{
 		readyList.remove(&that);
-	} else {
+	} 
+	else 
+	{
 		exit();
 	}
 }
@@ -80,10 +82,13 @@ void Scheduler::kill(Entrant& that)
  */
 void Scheduler::resume()
 {
-	// Füge laufenden hinzu
-	readyList.enqueue((Chain*)active());
-
 	// Entferne ersten und führe aus
-	Chain* tmp = readyList.dequeue();
-	dispatch(*((Entrant*)tmp));
+	// wenn es nur einen gibt wird der alte erneut ausgeführt
+	Entrant* tmp = (Entrant*)readyList.dequeue();
+	if (tmp) {
+		// Füge laufenden hinzu
+		readyList.enqueue((Entrant*)active());
+
+		dispatch(*tmp);
+	}
 }
