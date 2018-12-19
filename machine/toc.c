@@ -24,10 +24,19 @@ void toc_settle(
 	void *object
 ) 
 {
-	void **stack = &tos;
-	*(stack--) = kickoff;
-	*(stack) = object;
-	toc_go(regs);
+	// initialisiere die Elemente mit 0
+	regs->rbx = 0;
+	regs->r12 = 0;
+	regs->r13 = 0;
+	regs->r14 = 0;
+	regs->r15 = 0;
+
+	void **stack = tos; // pointer auf stack
+	*(stack-1) = kickoff;
+	*(stack-2) = object;
+
+	regs->rbp = *(stack-2);
+	regs->rsp = *(stack-1);
 }
 
 

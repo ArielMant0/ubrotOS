@@ -27,7 +27,7 @@ CGA_Screen::CGA_Screen() : index(0x3d4), data(0x3d5)
 
 void CGA_Screen::show(int x, int y, char c, unsigned char attrib)
 {
-    char *pos = (char*)(CGA_START + 2*(x + y*MAX_X));
+    char *pos = (char*)(CGA_START + 2*(x + y * MAX_X));
     *pos = c;
     *(pos+1) = attrib;
 }

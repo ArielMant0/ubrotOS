@@ -11,7 +11,29 @@
 /* naechstes laufen soll.                                                    */
 /*****************************************************************************/
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+#include "user/loop.h" 
+
+#include "device/cgastr.h"
+#include "guard/secure.h"
+
  
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
- 
+void Loop::action()
+{
+    int count = 0;
+    int x,y;
+
+    while(true)
+    {
+        {
+            Secure lock;
+            g_cga.getpos(x,y);
+            g_cga.setpos(75,0);
+            kout << count++;
+            if (count == 10000) {
+                count = 0;
+            }
+            kout.flush();
+            g_cga.setpos(x,y);
+        }
+    }
+}

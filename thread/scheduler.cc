@@ -11,6 +11,8 @@
 /* Hier muesst ihr selbst Code vervollstaendigen */ 
 #include "scheduler.h"
 
+Scheduler g_scheduler;
+
 /* Hier muesst ihr selbst Code vervollstaendigen */ 
 /* Hier muesst ihr selbst Code vervollstaendigen */ 
 
@@ -20,7 +22,7 @@
  */
 void Scheduler::ready(Entrant& that)
 {
-	readyList.enqueue(that);
+	readyList.enqueue(&that);
 }
 
 /*
@@ -29,9 +31,14 @@ void Scheduler::ready(Entrant& that)
  */
 void Scheduler::schedule()
 {
-	Chain* tmp = readyList.dequeue();
-	dispatch((Entrant*)tmp);
-	//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
+	// Frage den dispatcher ob nullptr vorliegt
+	if (!active()) {
+		Entrant* tmp = (Entrant*)readyList.dequeue();
+		if (tmp) {
+			go(*tmp);
+		}
+		//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
+	}
 }
 
 /*
@@ -43,7 +50,9 @@ void Scheduler::exit()
 {
 	// TODO was ist hier der unterschied zu schedule?
 	Chain* tmp = readyList.dequeue();
-	dispatch((Entrant*)tmp);
+	if (tmp) {
+		dispatch(*((Entrant*)tmp));
+	}
 	//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
 }
 
@@ -54,7 +63,12 @@ void Scheduler::exit()
  */
 void Scheduler::kill(Entrant& that)
 {
-	readyList.remove(that);
+	// Stelle sicher das es nicht der aktive ist
+	if (active() != &that) {
+		readyList.remove(&that);
+	} else {
+		exit();
+	}
 }
 
 /**
@@ -67,9 +81,9 @@ void Scheduler::kill(Entrant& that)
 void Scheduler::resume()
 {
 	// Füge laufenden hinzu
-	readyList.enqueue(active());
+	readyList.enqueue((Chain*)active());
 
 	// Entferne ersten und führe aus
 	Chain* tmp = readyList.dequeue();
-	((Entrant*)tmp)->resume(); // TODO soll das hier go sein?
+	dispatch(*((Entrant*)tmp));
 }

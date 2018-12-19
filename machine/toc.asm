@@ -26,13 +26,19 @@
 ; C Prototyp: void toc_go (struct toc* regs);
 
 toc_go:
-	mov rbx, [rax+rbx_offset]
-	mov r12, [rax+r12_offset]
-	mov r13, [rax+r13_offset]
-	mov r14, [rax+r14_offset]
-	mov r15, [rax+r15_offset]
-	mov rbp, [rax+rbp_offset]
-	mov rsp, [rax+rsp_offset]
+	push rbp
+	mov rbp,rsp
+
+	mov rbx, [rbp+rbx_offset]
+	mov r12, [rbp+r12_offset]
+	mov r13, [rbp+r13_offset]
+	mov r14, [rbp+r14_offset]
+	mov r15, [rbp+r15_offset]
+	mov rbp, [rbp+rbp_offset]
+	mov rsp, [rbp+rsp_offset]
+
+	pop rbp
+	ret
 
 ; TOC_SWITCH : Prozessumschaltung. Der aktuelle Registersatz wird
 ;              gesichert und der Registersatz des neuen "thread of control"
@@ -42,19 +48,25 @@ toc_go:
 ;                              struct toc* reg_then);
 
 toc_switch:
+	push rbp
+	mov rbp,rsp
+	
 ; Save registry content to regs_now
-	mov [rax+rbx_offset], rbx
-	mov [rax+r12_offset], r12
-	mov [rax+r13_offset], r13
-	mov [rax+r14_offset], r14
-	mov [rax+r15_offset], r15
-	mov [rax+rbp_offset], rbp
-	mov [rax+rsp_offset], rsp
+	mov [rbp+rbx_offset], rbx
+	mov [rbp+r12_offset], r12
+	mov [rbp+r13_offset], r13
+	mov [rbp+r14_offset], r14
+	mov [rbp+r15_offset], r15
+	mov [rbp+rbp_offset], rbp
+	mov [rbp+rsp_offset], rsp
 ; Load content of regs_then into registries
-	mov rbx, [rbx+rbx_offset]
-	mov r12, [rbx+r12_offset]
-	mov r13, [rbx+r13_offset]
-	mov r14, [rbx+r14_offset]
-	mov r15, [rbx+r15_offset]
-	mov rbp, [rbx+rbp_offset]
-	mov rsp, [rbx+rsp_offset]
+	mov rbx, [rbp+rsp_offset+rbx_offset]
+	mov r12, [rbp+rsp_offset+r12_offset]
+	mov r13, [rbp+rsp_offset+r13_offset]
+	mov r14, [rbp+rsp_offset+r14_offset]
+	mov r15, [rbp+rsp_offset+r15_offset]
+	mov rbp, [rbp+rsp_offset+rbp_offset]
+	mov rsp, [rbp+rsp_offset+rsp_offset]
+
+	pop rbp
+	ret

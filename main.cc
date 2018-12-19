@@ -1,14 +1,17 @@
 /* $Id: main.cc 8485 2017-03-27 11:50:06Z friesel $ */
 
 #include "user/appl.h"
+#include "thread/scheduler.h"
+#include "device/cgastr.h"
 
-int stack[256];
+static long stack[256];
 
 int main()
 {
-    Application app((void*)stack); // TODO: where does stack start?
+    Application app((void*)(stack + sizeof (stack)));
 
-    app.action();
+    g_scheduler.ready(app);
+	g_scheduler.schedule();
 
    	return 0;
 }

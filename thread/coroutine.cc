@@ -15,29 +15,49 @@
 /*****************************************************************************/
 
 #include "thread/coroutine.h"
-#include "machine/toc.c"
+#include "device/cgastr.h"
+
 
 // Funktionen, die auf der C- oder Assembler-Ebene implementiert werden,
 // muessen als extern "C" deklariert werden, da sie nicht dem Name-Mangeling
 // von C++ entsprechen.
 extern "C"
 {
-	Coroutine::Coroutine(void *tos)
-	{
-		m_toc = toc();
-		// let stack pointer point to tos
-		toc_settle((void*)&m_toc, tos, kickoff); // kickoff ?
-	}
+ 	void toc_go(struct toc* regs);
+	void toc_switch(struct toc* regs_now, struct toc* reg_then);
+	//void toc_settle(struct toc*, void*, void (*func)(void*), void*);
+	void toc_settle(
+		struct toc*, void*, 
+		void (*func)(void*, void*, void*, void*, void*, void*, void*), 
+		void*
+	);
+}
 
-	/* Hier muesst ihr selbst Code vervollstaendigen */
-	void Coroutine::resume(Coroutine &next)
-	{
-		// coroutine-switch
-		toc_switch(m_toc, next.m_toc);
-	}
+extern void kickoff(void*, void*, void*, void*, void*, void*, void*);
+
+Coroutine::Coroutine(void *tos)
+{
+	m_toc = toc();
+
+	g_cga.show(50, 5, 'A');
+    
+    kout << "endl" << endl;
+	// let stack pointer point to tos
+	toc_settle(&m_toc, tos, kickoff, this); // kickoff ?
+
+	g_cga.show(55, 5, 'A');
+    
+    //kout << "endl" << endl;
 }
 
 void Coroutine::go()
 {
-	// ?
+	// übergebe Pointer auf die Adresse
+	toc_go(&m_toc);
+}
+
+void Coroutine::resume(Coroutine &next)
+{
+	// coroutine-switch
+	toc_switch(&m_toc, &next.m_toc);
 }

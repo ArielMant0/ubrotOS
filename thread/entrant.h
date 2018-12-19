@@ -22,9 +22,9 @@ private:
     Entrant(const Entrant &copy); // Verhindere Kopieren
 /* Hier muesst ihr selbst Code vervollstaendigen */
 public:
-	Entrant(void *tos)
+	Entrant(void *tos) : Coroutine(tos)
 	{
-		super(tos);
+		//super(tos);
 	} 
 };
 

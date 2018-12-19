@@ -25,6 +25,8 @@ private:
     Queue readyList;
 
 public:
+	Scheduler() {}
+
 	void ready(Entrant& that);
 	
 	void schedule();
@@ -35,5 +37,7 @@ public:
 
  	void resume();
 };
+
+extern Scheduler g_scheduler;
 
 #endif

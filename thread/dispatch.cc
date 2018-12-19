@@ -13,32 +13,39 @@
 /*****************************************************************************/
 
 /* Hier muesst ihr selbst Code vervollstaendigen */ 
-
+#include "thread/dispatch.h"
 
 // Der Konstruktor initialisiert den Life-Pointer mit Null, um anzuzeigen, 
 // dass noch keine Koroutine bekannt ist.
-Dispatcher()
+Dispatcher::Dispatcher()
 {
-    lifePointer = NULL;
+    lifePointer = nullptr;
 }
 
 // Mit dieser Methode wird die Koroutine first im Life-Pointer vermerkt und gestartet.
-void go(Coroutine& first)
+void Dispatcher::go(Coroutine& first)
 {
-    lifePointer = first;
+	// Wenn nullptr
+	if(!lifePointer)
+	{
+    	lifePointer = &first;
+    	lifePointer->go();
+	}
 }
 
 // Diese Methode setzt den Life-Pointer auf next und führt einen Koroutinenwechsel 
 // vom alten zum neuen Life-Pointer durch.
-void dispatch(Coroutine& next)
+void Dispatcher::dispatch(Coroutine& next)
 {
-	lifePointer = next;
+	Coroutine* now = lifePointer;
+
+	lifePointer = &next;
 	// TODO soll das hier go sein?
-	lifePointer->resume(next);
+	now->resume(next);
 }
  
 // Hiermit kann abgefragt werden, welche Koroutine gerade im Besitz des Prozessors ist.    
-Coroutine* active()
+Coroutine* Dispatcher::active()
 {
     return lifePointer;
 }

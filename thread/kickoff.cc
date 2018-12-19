@@ -12,6 +12,8 @@
 /* Ruecksprungadresse interpretiert werden und der Rechner abstuerzen.       */
 /*****************************************************************************/
 
+#include "thread/coroutine.h"
+
 void kickoff (
 	void *dummy1,
 	void *dummy2,
@@ -19,10 +21,10 @@ void kickoff (
 	void *dummy4,
 	void *dummy5,
 	void *dummy6,
-	Coroutine* object
+	void* object
 ) {
 	// Call coroutine (start) function
-	object->action();
+	((Coroutine*)object)->action();
 	// This function should not terminate?
 	while (true) {}
 }

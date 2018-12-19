@@ -11,9 +11,9 @@
 #ifndef __application_include__
 #define __application_include__
 
-#include "thread/coroutine.h"
+#include "thread/entrant.h"
 
-class Application : public Coroutine
+class Application : public Entrant
 {
 
 private:
@@ -27,7 +27,7 @@ private:
 
 public:
           
-    Application(void *tos) : Coroutine(tos) {}
+    Application(void *tos) : Entrant(tos) {}
 
     void action () override;
 
