@@ -25,17 +25,17 @@ void Application::action()
         Secure lock;
         g_cga.clear();
     }
-    
+
     g_cpu.enable_int();
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack1[256];
-    Loop p1((void*)(stack1 + sizeof (stack1)), 75, 0);
+    Loop p1((void*)(stack1 + (sizeof (stack1) / 8)), 75, 0);
     g_scheduler.ready(p1);
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack2[256];
-    Loop p2((void*)(stack2 + sizeof (stack2)), 0, 0);
+    Loop p2((void*)(stack2 + (sizeof (stack2) / 8)), 0, 0);
     g_scheduler.ready(p2);
 
 

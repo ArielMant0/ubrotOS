@@ -10,7 +10,7 @@ int main()
 {
 	// Erzeuge ersten thread mit stack
 	// Appl ruft Entrant-Konstruktor auf und dann Coroutine-Konstruktor
-    Application app((void*)(stack + sizeof (stack)));
+    Application app((void*)(stack + (sizeof (stack) / 8)));
 
     // Füge den ersten Entrant ein
     g_scheduler.ready(app);
