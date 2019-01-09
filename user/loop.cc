@@ -15,26 +15,14 @@
 
 #include "device/cgastr.h"
 #include "guard/secure.h"
-#include "thread/scheduler.h"
+#include "syscall/guarded_scheduler.h"
  
-
-
-
 void Loop::action()
 {
     int x,y;
     for (int count = 0; count < 100000; count++)
     {
-        {
-            Secure lock;
-            g_cga.getpos(x,y);
-            g_cga.setpos(m_x,m_y);
-
-            kout << count++;
-
-            kout.flush();
-            g_cga.setpos(x,y);
-        }
+        printGreeting();
         // Wait a bit
         for (int i = 0; i < 500; ++i) {}
 
@@ -42,4 +30,11 @@ void Loop::action()
     }
 
     g_scheduler.exit();
+}
+
+void Loop::printGreeting()
+{
+    Secure lock;
+
+    kout << "[ Thread " << m_id << " says hello! ]" << endl;
 }

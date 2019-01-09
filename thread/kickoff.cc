@@ -13,6 +13,7 @@
 /*****************************************************************************/
 
 #include "thread/coroutine.h"
+#include "guard/guard.h"
 
 void kickoff (
 	void *dummy1,
@@ -23,6 +24,7 @@ void kickoff (
 	void *dummy6,
 	void* object
 ) {
+	g_guard.leave();
 	// Call coroutine (start) function
 	((Coroutine*)object)->action();
 	// This function should not terminate?

@@ -12,6 +12,7 @@
 /* INCLUDES */
 #include "machine/plugbox.h"
 #include "guard/guard.h"
+#include "device/cgastr.h" // debugging
 
 extern "C" void guardian (unsigned int slot);
 

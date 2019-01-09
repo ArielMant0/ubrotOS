@@ -13,15 +13,20 @@
 #ifndef __loop_include__
 #define __loop_include__
 
-#include "thread/entrant.h"
+#include "appl.h"
         
-class Loop : public Entrant
+class Loop : public Application
 {
 
-	int m_x, m_y;
+private:
+
+	int m_x, m_y, m_id;
+
+	void printGreeting();
 
 public:
-	Loop (void* tos, int x, int y) : Entrant(tos), m_x(x), m_y(y) {} 
+
+	Loop (void* tos, int id, int x, int y) : Application(tos), m_x(x), m_y(y), m_id(id) {} 
 
 	void action() override;
 };

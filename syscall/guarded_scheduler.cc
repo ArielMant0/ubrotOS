@@ -8,4 +8,28 @@
 /* Systemaufrufschnittstelle zum Scheduler.                                  */
 /*****************************************************************************/
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+#include "guarded_scheduler.h"
+#include "guard/secure.h"
+
+Guarded_Scheduler g_scheduler;
+
+void Guarded_Scheduler::ready(Thread &that) {
+	Secure lock;
+	Scheduler::ready(that);
+}
+
+void Guarded_Scheduler::exit() {
+	Secure lock;
+	Scheduler::exit();
+}
+
+void Guarded_Scheduler::kill(Thread& that) {
+	Secure lock;
+	Scheduler::kill(that);
+}
+
+void Guarded_Scheduler::resume() {
+	Secure lock;
+	Scheduler::resume();
+}
+

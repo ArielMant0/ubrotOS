@@ -38,6 +38,4 @@ public:
  	void resume();
 };
 
-extern Scheduler g_scheduler;
-
 #endif

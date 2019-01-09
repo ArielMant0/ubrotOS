@@ -11,16 +11,25 @@
 #ifndef __thread_include__
 #define __thread_include__
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
- 
-class Thread 
-/* Hier muesst ihr selbst Code vervollstaendigen */  
-  
- {
+#include "thread/entrant.h"
+
+/**
+ * Die Klasse Thread implementiert die Benutzerschnittstelle eines Fadens. Zur Zeit ist Thread
+ * nichts weiter als ein neuer Name für die Klasse Entrant.
+ */
+class Thread : public Entrant
+{
+
 private:
-      Thread (const Thread &copy); // Verhindere Kopieren
-/* Hier muesst ihr selbst Code vervollstaendigen */          
+
+    Thread (const Thread &copy); // Verhindere Kopieren
+
+public:
+
+	// Der Konstruktor leitet den Parameter tos an den Konstruktor der Basisklasse 
+	// Entrant weiter. 	
+	Thread (void* tos) : Entrant(tos) {}
           
- };
+};
 
 #endif

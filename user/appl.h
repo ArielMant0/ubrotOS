@@ -11,27 +11,20 @@
 #ifndef __application_include__
 #define __application_include__
 
-#include "thread/entrant.h"
+#include "syscall/thread.h"
 
-class Application : public Entrant
+class Application : public Thread
 {
 
 private:
 
     Application (const Application &copy); // Verhindere Kopieren
 
-    bool test_cga_screen();
-    bool test_o_stream();
-    bool test_cga_stream();
-    bool test_keyboard();
-
 public:
           
-    Application(void *tos) : Entrant(tos) {}
+    Application(void *tos) : Thread(tos) {}
 
     void action () override;
-
-    bool test();
 
 };
 

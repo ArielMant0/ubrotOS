@@ -10,9 +10,6 @@
 
 #include "scheduler.h"
 
-Scheduler g_scheduler;
-
-
 /*
  * Mit dieser Methode wird der Prozess that beim Scheduler angemeldet. 
  * Er wird an das Ende der Ready-Liste angefügt.

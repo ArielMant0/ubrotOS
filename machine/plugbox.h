@@ -31,7 +31,7 @@ public:
 	 * Unterbrechungsbehandlung gate zu der Unterbrechung Nummer slot 
 	 * in die PlugBox eingetragen werden.
 	 */
-	void assign (unsigned int slot, Gate& gate);
+	void assign (unsigned int slot, Gate &gate);
     
     /**
      * Hiermit kann das Gate-Objekt abgefragt werden, das zu der 
