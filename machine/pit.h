@@ -39,8 +39,6 @@ private:
     };
     enum Format { binary=0, bcd };
 
-    void setTimer(PIT::Counter which, int us);
-
 public:
 
 	/**
@@ -50,10 +48,6 @@ public:
 	 */
     PIT (int us) : m_count1(0x40), m_control(0x43) {
       interval (us);
-    }
-
-    int frequency(int us) {
-        return 1000000 / us;
     }
 
     // Gibt an, welches Unterbrechungsintervall eingestellt wurde.

@@ -19,10 +19,9 @@
  
 void Loop::action()
 {
-    int x,y;
     for (int count = 0; count < 100000; count++)
     {
-        printGreeting();
+        printGreeting(count);
         // Wait a bit
         for (int i = 0; i < 500; ++i) {}
 
@@ -32,9 +31,14 @@ void Loop::action()
     g_scheduler.exit();
 }
 
-void Loop::printGreeting()
+void Loop::printGreeting(int count)
 {
     Secure lock;
 
-    kout << "[ Thread " << m_id << " says hello! ]" << endl;
+    int x,y;
+
+    g_cga.getpos(x,y);
+    g_cga.setpos(m_x,m_y);
+    kout << "[ Thread " << m_id << "] (" << count << '/' << 100000 << ')' << endl;
+    g_cga.setpos(x,y);
 }

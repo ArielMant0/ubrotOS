@@ -21,7 +21,6 @@ int main()
     g_cpu.enable_int();
     // Set the timer
 	g_watch.windup();
-	kout << "Intervall is " << g_watch.interval() << endl;
 	// Organisiere die Entrants
 	g_scheduler.Scheduler::schedule();
    	

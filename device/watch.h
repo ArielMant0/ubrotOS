@@ -22,6 +22,8 @@ class Watch : public Gate, public PIT
 
 private:
 
+    int m_count;
+
     Watch (const Watch &copy); // Verhindere Kopieren
 
 public:
@@ -29,7 +31,7 @@ public:
     // WATCH: Initialisiert die Uhr.
     // Im Konstruktor wird der Timer so initialisiert, dass er in Abständen von
     // ca. us Mikrosekunden regelmäßig Unterbrechungen auslöst.
-    Watch (int us) : PIT (us) {}
+    Watch (int us) : PIT (us), m_count(0) {}
 
     // WINDUP: "zieht die Uhr auf". Danach laeuft sie los und loest in
     //         regelmaessigen Abstaenden Unterbrechungen aus.

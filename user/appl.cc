@@ -19,19 +19,19 @@
 
 void Application::action()
 {
-    /*{
+    {
         Secure lock;
         g_cga.clear();
-    }*/
+    }
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack1[256];
-    Loop p1((void*)(stack1 + (sizeof (stack1) / 8)), 75, 0, 1);
+    Loop p1((void*)(stack1 + (sizeof (stack1) / 8)), 1, 0, 7);
     g_scheduler.ready(p1);
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack2[256];
-    Loop p2((void*)(stack2 + (sizeof (stack2) / 8)), 0, 0, 2);
+    Loop p2((void*)(stack2 + (sizeof (stack2) / 8)), 2, 0, 9);
     g_scheduler.ready(p2);
 
 
@@ -54,6 +54,8 @@ void Application::action()
 
             g_cga.setpos(x,y);
         }
+
+        g_scheduler.resume();
 
     };
 
