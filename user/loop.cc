@@ -19,7 +19,7 @@
  
 void Loop::action()
 {
-    for (int count = 0; count < 100000; count++)
+    for (int count = 1; count <= 200000; count++)
     {
         printGreeting(count);
         // Wait a bit
@@ -39,6 +39,6 @@ void Loop::printGreeting(int count)
 
     g_cga.getpos(x,y);
     g_cga.setpos(m_x,m_y);
-    kout << "[ Thread " << m_id << "] (" << count << '/' << 100000 << ')' << endl;
+    kout << "[ Thread " << m_id << "] (" << count << '/' << 200000 << ')' << endl;
     g_cga.setpos(x,y);
 }

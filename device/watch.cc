@@ -14,36 +14,28 @@
 
 #include "device/cgastr.h" // debugging
 
-Watch g_watch(60); // 60 ms
+Watch g_watch(60);
 
 void Watch::windup() {
 	// Rgeister this handler as the plugbox
 	g_plugbox.assign(g_plugbox.timer, *this);
 	// Allow (timer) interrupts
-	g_pic.allow(g_plugbox.timer);
+	g_pic.allow(timer);
 }
 
 bool Watch::prologue() {
-	g_pic.forbid(g_plugbox.timer);
-	
-	int x,y;
-	g_cga.getpos(x, y);
-    g_cga.setpos(0, 11);
-    kout << "Watch: Timer Prolog (" << m_count++ << ')';
-    kout.flush();
-	g_cga.setpos(x, y);
+	g_pic.forbid(timer);
 	
 	return true;
 }
 
 void Watch::epilogue() {
 	int x,y;
-	g_cga.getpos(x, y);
-    g_cga.setpos(0, 11);
-    kout << "Watch: Timer Epilog (" << m_count << ')';
-    kout.flush();
-	g_cga.setpos(x, y);
+	g_cga.getpos(x,y);
+	g_cga.setpos(0,1);
+	kout << "Changing context ! (" << m_count++ <<  ')' << endl;
+	g_cga.setpos(x,y);
 
-	g_pic.allow(g_plugbox.timer);
+	g_pic.allow(timer);
 	g_scheduler.Scheduler::resume();
 }

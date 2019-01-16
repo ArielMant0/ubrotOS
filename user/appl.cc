@@ -21,17 +21,17 @@ void Application::action()
 {
     {
         Secure lock;
-        //g_cga.clear();
+        g_cga.clear();
     }
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack1[256];
-    Loop p1((void*)(stack1 + (sizeof (stack1) / 8)), 1, 0, 7);
+    Loop p1((void*)(stack1 + (sizeof (stack1) / 8)), 1, 0, 9);
     g_scheduler.ready(p1);
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack2[256];
-    Loop p2((void*)(stack2 + (sizeof (stack2) / 8)), 2, 0, 9);
+    Loop p2((void*)(stack2 + (sizeof (stack2) / 8)), 2, 0, 10);
     g_scheduler.ready(p2);
 
 
@@ -39,9 +39,18 @@ void Application::action()
     while (true)
     {
         // beende p2
-        if (counter++ == 10000) 
+        if (counter++ == 75000) 
         {
             g_scheduler.kill(p2);
+        }
+        else if (counter > 75000)
+        {
+            Secure lock;
+
+            g_cga.getpos(x,y);
+            g_cga.setpos(0,6);
+            kout << "    Killed Thread 2" << endl;
+            g_cga.setpos(x,y);
         }
         
         // Verwende lock aus einer der vorherigen Aufgaben
@@ -50,12 +59,12 @@ void Application::action()
 
             g_cga.getpos(x,y);
             g_cga.setpos(0,5);
-            kout << "!!! Main Application: " << counter << endl;
+            kout << "  Main Application: " << counter << endl;
 
             g_cga.setpos(x,y);
         }
 
-        g_scheduler.resume();
+        //g_scheduler.resume();
 
     };
 
