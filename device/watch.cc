@@ -14,7 +14,7 @@
 
 #include "device/cgastr.h" // debugging
 
-Watch g_watch(60000); // 60 ms
+Watch g_watch(60); // 60 ms
 
 void Watch::windup() {
 	// Rgeister this handler as the plugbox
@@ -25,6 +25,14 @@ void Watch::windup() {
 
 bool Watch::prologue() {
 	g_pic.forbid(g_plugbox.timer);
+	
+	int x,y;
+	g_cga.getpos(x, y);
+    g_cga.setpos(0, 11);
+    kout << "Watch: Timer Prolog (" << m_count++ << ')';
+    kout.flush();
+	g_cga.setpos(x, y);
+	
 	return true;
 }
 
@@ -32,7 +40,7 @@ void Watch::epilogue() {
 	int x,y;
 	g_cga.getpos(x, y);
     g_cga.setpos(0, 11);
-    kout << "Watch: Timer Interrupt (" << m_count++ << ')';
+    kout << "Watch: Timer Epilog (" << m_count << ')';
     kout.flush();
 	g_cga.setpos(x, y);
 

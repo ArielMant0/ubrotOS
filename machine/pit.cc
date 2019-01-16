@@ -11,7 +11,8 @@
 #include "pit.h"
 
 void PIT::interval (int us) {
-	m_interval = us;//1193182 / frequency(us);
+	int hz = 65536; // TODO
+	m_interval = 1193182 / hz;
 
 	int cmd = PIT::Counter::first << 6 | 
 		PIT::ReadWrite::lowhigh << 4 | 

@@ -21,7 +21,7 @@ void Application::action()
 {
     {
         Secure lock;
-        g_cga.clear();
+        //g_cga.clear();
     }
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
