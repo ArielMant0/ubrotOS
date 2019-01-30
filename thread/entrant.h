@@ -13,7 +13,7 @@
 
 #include "coroutine.h"
 #include "object/chain.h"
-        
+
 class Entrant : public Coroutine, public Chain
 {
 private:
@@ -22,7 +22,12 @@ private:
 
 public:
 
-	Entrant(void *tos) : Coroutine(tos) {} 
+	Entrant(void *tos) : Coroutine(tos) {}
+
+	virtual bool is_idle()
+	{
+		return false;
+	}
 };
 
 #endif

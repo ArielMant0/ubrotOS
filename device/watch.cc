@@ -26,20 +26,13 @@ void Watch::windup() {
 
 bool Watch::prologue() {
 	g_pic.forbid(timer);
-	
+
 	return true;
 }
 
 void Watch::epilogue() {
 	// Check bells
 	g_bellringer.check();
-
-	int x,y;
-	g_cga.getpos(x,y);
-	g_cga.setpos(0,1);
-	kout << "Changing context ! (" << m_count++ <<  ')' << endl;
-	g_cga.setpos(x,y);
-
 	g_pic.allow(timer);
 	g_scheduler.Scheduler::resume();
 }

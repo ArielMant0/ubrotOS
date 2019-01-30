@@ -30,10 +30,18 @@ void Keyboard::plugin()
 bool Keyboard::prologue()
 {
 	// Get Key
-	m_key = key_hit();
+	Key tmp = key_hit();
 	// If its a valid key, do the epilogue
-	if (m_key.valid()) {
+	if (tmp.valid())
+	{
 		g_pic.forbid(keyboard);
+
+		if (tmp.ctrl() && tmp.alt() && tmp.scancode() == 83)
+		{
+			reboot();
+		}
+
+		m_key = tmp;
 		return true;
 	}
 	return false;
@@ -41,12 +49,6 @@ bool Keyboard::prologue()
 
 void Keyboard::epilogue()
 {
-	// Print key to screen
-	/*if (!specialStuff(m_key) && m_key.valid())
-	{
-		kout << m_key.ascii();
-		kout.flush();
-	}*/
 	g_pic.allow(keyboard);
 
 	// Singal that a key was read

@@ -9,14 +9,14 @@
 /* von Threads (Customer) auf Ereignisse erlaubt.                            */
 /*****************************************************************************/
 
-/* Hier muesst ihr selbst Code vervollstaendigen */ 
+/* Hier muesst ihr selbst Code vervollstaendigen */
 
 #include "organizer.h"
 
 void Organizer::block (Customer& customer, Waitingroom& waitingroom)
 {
 	customer.waiting_in(&waitingroom);
-	exit(); // resume() ?
+	exit();
 }
 
 void Organizer::wakeup (Customer& customer)

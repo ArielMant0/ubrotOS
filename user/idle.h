@@ -12,6 +12,9 @@
 #define __idlethread_include__
 
 #include "user/appl.h"
+#include "device/cgastr.h"
+#include "machine/cpu.h"
+#include "syscall/guarded_organizer.h"
 
 class IdleThread : public Application
 {
@@ -21,12 +24,27 @@ private:
     IdleThread (const Application &copy); // Verhindere Kopieren
 
 public:
-          
-    IdleThread() : Application(nullptr) {}
+
+    IdleThread(void *tos) : Application(tos) {}
 
     void action () override
     {
-    	// TODO
+        int counter = 0;
+        int x,y;
+    	while (true)
+        {
+            kout.getpos(x,y);
+            kout.setpos(0,15);
+            kout << "Idle Thread is running ... " << counter++ << endl;
+            kout.setpos(x,y);
+
+            g_cpu.idle();
+            g_organizer.resume();
+        }
+    }
+
+    bool is_idle() override{
+        return true;
     }
 
 };

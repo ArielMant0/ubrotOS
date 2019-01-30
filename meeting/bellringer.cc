@@ -18,11 +18,16 @@ void Bellringer::check ()
 {
 	for (Bell *bell = (Bell*) first(); bell; bell=(Bell*)bell->next)
 	{
-		bell->tick();
 		if (bell->run_down())
 		{
+			remove(bell);
 			bell->ring();
 		}
+		else
+		{
+			bell->tick();
+		}
+
 	}
 }
 

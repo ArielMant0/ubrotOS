@@ -42,10 +42,9 @@ void Application::action()
         Key the_key = g_keyboard.getKey();
 
         // beende p2
-        if (counter++ == 75000) 
+        if (counter++ == 5)
         {
             g_organizer.kill(p2);
-            //Secure s;
             screen_lock.wait();
 
             kout.getpos(x,y);
@@ -55,19 +54,18 @@ void Application::action()
 
             screen_lock.signal();
         }
-        
+
         // Verwende lock aus einer der vorherigen Aufgaben
         screen_lock.wait();
         {
-            //Secure s;
             kout.getpos(x,y);
             kout.setpos(0,5);
-            kout << "  Main Application: " << counter << " (last key: ";// << endl;
+            kout << "Main Application: " << counter << " (last key: ";// << endl;
             kout << the_key.ascii() << ')' << endl;
             kout.setpos(x,y);
         }
         screen_lock.signal();
-        
+
         //g_organizer.resume();
     }
 }

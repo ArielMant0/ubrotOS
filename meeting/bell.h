@@ -25,8 +25,8 @@ private:
     Bell(const Bell &copy); // Verhindere Kopieren
 
 public:
-    
-    Bell() : Chain(), m_count(-1) {}
+
+    Bell() : Chain() {}
 
 	void wait (int value)
 	{
@@ -48,7 +48,7 @@ public:
 	// Liefert true, wenn die Zeit abgelaufen ist.
 	bool run_down()
 	{
-		return m_count == 0;
+		return m_count <= 0;
 	}
 
 	// Wird vom Glöckner aufgerufen, wenn es an der Zeit ist.
