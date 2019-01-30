@@ -2,27 +2,28 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                            E N T R A N T                                  */
+/*                        W A I T I N G R O O M                              */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Eine Koroutine, die vom Scheduler verwaltet wird.                         */
+/* Liste von Threads, die auf ein Ereignis warten.                           */
 /*****************************************************************************/
 
-#ifndef __entrant_include__
-#define __entrant_include__
+#include "waitingroom.h"
+#include "syscall/guarded_organizer.h"
+#include "thread/customer.h"
 
-#include "coroutine.h"
-#include "object/chain.h"
-        
-class Entrant : public Coroutine, public Chain
+extern Guarded_Organizer g_organizer;
+
+Waitingroom::~Waitingroom()
 {
-private:
+	// Gehe alle elem durch + wakeup
+	for (Customer* elem = (Customer*)dequeue(); elem; elem = (Customer*)dequeue()) 
+	{
+		g_organizer.wakeup(*elem);
+	}
+}
 
-    Entrant(const Entrant &copy); // Verhindere Kopieren
-
-public:
-
-	Entrant(void *tos) : Coroutine(tos) {} 
-};
-
-#endif
+void Waitingroom::remove(Customer* customer)
+{
+	Queue::remove(customer);
+}

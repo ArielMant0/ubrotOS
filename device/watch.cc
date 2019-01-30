@@ -11,6 +11,7 @@
 #include "machine/plugbox.h"
 #include "machine/pic.h"
 #include "syscall/guarded_scheduler.h"
+#include "meeting/bellringer.h"
 
 #include "device/cgastr.h" // debugging
 
@@ -30,6 +31,9 @@ bool Watch::prologue() {
 }
 
 void Watch::epilogue() {
+	// Check bells
+	g_bellringer.check();
+
 	int x,y;
 	g_cga.getpos(x,y);
 	g_cga.setpos(0,1);

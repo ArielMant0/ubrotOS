@@ -2,27 +2,35 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                            E N T R A N T                                  */
+/*                   G U A R D E D _ S E M A P H O R E                       */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Eine Koroutine, die vom Scheduler verwaltet wird.                         */
+/* Systemaufrufschnittstelle zum Semaphor.                                   */
 /*****************************************************************************/
 
-#ifndef __entrant_include__
-#define __entrant_include__
+#include "guarded_semaphore.h"
+#include "guard/secure.h"
 
-#include "coroutine.h"
-#include "object/chain.h"
-        
-class Entrant : public Coroutine, public Chain
+void Guarded_Semaphore::p()
 {
-private:
+	Secure lock;
+	Semaphore::p();
+}
+    
+void Guarded_Semaphore::v()
+{
+	Secure lock;
+    Semaphore::v();
+}
 
-    Entrant(const Entrant &copy); // Verhindere Kopieren
+void Guarded_Semaphore::wait()
+{
+	Secure lock;
+    Semaphore::wait();
+}
 
-public:
-
-	Entrant(void *tos) : Coroutine(tos) {} 
-};
-
-#endif
+void Guarded_Semaphore::signal()
+{
+	Secure lock;	
+    Semaphore::signal();
+}

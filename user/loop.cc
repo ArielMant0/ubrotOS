@@ -15,30 +15,46 @@
 
 #include "device/cgastr.h"
 #include "guard/secure.h"
-#include "syscall/guarded_scheduler.h"
+#include "syscall/guarded_organizer.h"
+#include "syscall/guarded_buzzer.h"
  
 void Loop::action()
 {
     for (int count = 1; count <= 200000; count++)
     {
         printGreeting(count);
-        // Wait a bit
-        for (int i = 0; i < 500; ++i) {}
 
-        g_scheduler.resume();
+        g_organizer.resume();
     }
 
-    g_scheduler.exit();
+    g_organizer.exit();
 }
 
 void Loop::printGreeting(int count)
 {
-    Secure lock;
-
+    Secure s;
     int x,y;
 
-    g_cga.getpos(x,y);
-    g_cga.setpos(m_x,m_y);
+    //screen_lock.wait();
+    kout.getpos(x,y);
+    kout.setpos(m_x,m_y);
     kout << "[ Thread " << m_id << "] (" << count << '/' << 200000 << ')' << endl;
-    g_cga.setpos(x,y);
+    kout.setpos(x,y);
+    //screen_lock.signal();
+    /*
+    Guarded_Buzzer buzzer;
+    buzzer.set(100);
+
+    screen_lock.wait();
+    kout << "    ... starts sleeping" << endl;
+    screen_lock.signal();
+
+    buzzer.sleep();
+
+    screen_lock.wait();
+    kout.getpos(x,y);
+    kout.setpos(m_x,m_y+1);
+    kout << "    ... woke up" << endl;
+    kout.setpos(x,y);
+    screen_lock.signal();*/
 }

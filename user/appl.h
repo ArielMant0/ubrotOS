@@ -12,6 +12,7 @@
 #define __application_include__
 
 #include "syscall/thread.h"
+#include "syscall/guarded_semaphore.h"
 
 class Application : public Thread
 {
@@ -27,5 +28,7 @@ public:
     void action () override;
 
 };
+
+extern Guarded_Semaphore screen_lock;
 
 #endif

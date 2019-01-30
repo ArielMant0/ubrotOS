@@ -2,27 +2,19 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                            E N T R A N T                                  */
+/*                   G U A R D E D _ K E Y B O A R D                         */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Eine Koroutine, die vom Scheduler verwaltet wird.                         */
+/* Systemaufrufschnittstelle zur Tastatur.                                   */
 /*****************************************************************************/
 
-#ifndef __entrant_include__
-#define __entrant_include__
+#include "guarded_keyboard.h"
+#include "guard/secure.h"
 
-#include "coroutine.h"
-#include "object/chain.h"
-        
-class Entrant : public Coroutine, public Chain
+Guarded_Keyboard g_keyboard;
+
+Key Guarded_Keyboard::getKey()
 {
-private:
-
-    Entrant(const Entrant &copy); // Verhindere Kopieren
-
-public:
-
-	Entrant(void *tos) : Coroutine(tos) {} 
-};
-
-#endif
+	Secure lock;
+	return Keyboard::getKey();
+}

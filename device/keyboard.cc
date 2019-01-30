@@ -14,9 +14,9 @@
 
 #include "device/cgastr.h"
 
-Keyboard g_keyboard;
+// Keyboard g_keyboard;
 
-Keyboard::Keyboard()
+Keyboard::Keyboard() : m_keySema(0), m_gotKey(true)
 {
 	plugin();
 }
@@ -32,17 +32,28 @@ bool Keyboard::prologue()
 	// Get Key
 	m_key = key_hit();
 	// If its a valid key, do the epilogue
-	return m_key.valid();
+	if (m_key.valid()) {
+		g_pic.forbid(keyboard);
+		return true;
+	}
+	return false;
 }
 
 void Keyboard::epilogue()
 {
 	// Print key to screen
-	if (!specialStuff(m_key) && m_key.valid())
+	/*if (!specialStuff(m_key) && m_key.valid())
 	{
 		kout << m_key.ascii();
 		kout.flush();
-	}
+	}*/
+	g_pic.allow(keyboard);
+
+	// Singal that a key was read
+	if (m_gotKey) {
+        m_gotKey = false;
+        m_keySema.signal();
+    }
 }
 
 bool Keyboard::specialStuff(Key &key)
@@ -72,3 +83,9 @@ bool Keyboard::specialStuff(Key &key)
 	return false;
 }
 
+Key Keyboard::getKey()
+{
+	m_keySema.wait();
+    m_gotKey = true;
+	return m_key;
+}

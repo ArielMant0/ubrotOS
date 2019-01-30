@@ -25,6 +25,21 @@ public:
 
     void flush() override;
 
+    void setpos(int x, int y)
+    {
+    	g_cga.setpos(x, y);
+    }
+
+    void getpos(int &x, int &y)
+    {
+    	g_cga.getpos(x, y);
+    }
+
+    void clear()
+    {
+        g_cga.clear();
+    }
+
 private:
 
     CGA_Stream(CGA_Stream &copy); // Verhindere Kopieren

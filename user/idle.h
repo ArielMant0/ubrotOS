@@ -2,37 +2,33 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                          S C H E D U L E R                                */
+/*                         A P P L I C A T I O N                             */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Implementierung des Schedulers.                                           */
+/* Die Klasse Application definiert die einzige Anwendung von OO-Stubs.      */
 /*****************************************************************************/
 
-#ifndef __schedule_include__
-#define __schedule_include__
+#ifndef __idlethread_include__
+#define __idlethread_include__
 
-#include "thread/dispatch.h"
-#include "object/queue.h"
-#include "thread/entrant.h"
+#include "user/appl.h"
 
-class Scheduler : public Dispatcher
+class IdleThread : public Application
 {
+
 private:
-    Scheduler(const Scheduler &copy); // Verhindere Kopieren
-    Queue readyList;
+
+    IdleThread (const Application &copy); // Verhindere Kopieren
 
 public:
-	Scheduler() {}
+          
+    IdleThread() : Application(nullptr) {}
 
-	void ready(Entrant& that);
-	
-	void schedule();
+    void action () override
+    {
+    	// TODO
+    }
 
- 	void exit();
-
- 	void kill(Entrant& that);
-
- 	void resume();
 };
 
 #endif

@@ -2,27 +2,37 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                            E N T R A N T                                  */
+/*                    G U A R D E D _ O R G A N I Z E R                      */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Eine Koroutine, die vom Scheduler verwaltet wird.                         */
+/* Systemaufrufschnittstelle zum Organizer.                                  */
 /*****************************************************************************/
 
-#ifndef __entrant_include__
-#define __entrant_include__
+#include "guarded_organizer.h"
+#include "guard/secure.h"
 
-#include "coroutine.h"
-#include "object/chain.h"
-        
-class Entrant : public Coroutine, public Chain
+Guarded_Organizer g_organizer;
+
+void Guarded_Organizer::ready(Thread& that)
 {
-private:
+	Secure lock;
+	Organizer::ready(that);
+}
 
-    Entrant(const Entrant &copy); // Verhindere Kopieren
+void Guarded_Organizer::exit()
+{
+	Secure lock;
+	Organizer::exit();
+}
 
-public:
+void Guarded_Organizer::kill(Thread& that)
+{
+	Secure lock;
+	Organizer::kill(that);
+}
 
-	Entrant(void *tos) : Coroutine(tos) {} 
-};
-
-#endif
+void Guarded_Organizer::resume()
+{
+	Secure lock;
+	Organizer::resume();
+}

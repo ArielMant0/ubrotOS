@@ -2,27 +2,24 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                            E N T R A N T                                  */
+/*                        G U A R D E D _ B U Z Z E R                        */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Eine Koroutine, die vom Scheduler verwaltet wird.                         */
+/* Schnittstelle von Anwendungsthreads zu Buzzer-Objekten.                   */
 /*****************************************************************************/
 
-#ifndef __entrant_include__
-#define __entrant_include__
+/* INCLUDES */
 
-#include "coroutine.h"
-#include "object/chain.h"
-        
-class Entrant : public Coroutine, public Chain
+#include "syscall/guarded_buzzer.h"
+
+void Guarded_Buzzer::set (int ms)
 {
-private:
+	Secure lock;
+	Buzzer::set(ms);
+}
 
-    Entrant(const Entrant &copy); // Verhindere Kopieren
-
-public:
-
-	Entrant(void *tos) : Coroutine(tos) {} 
-};
-
-#endif
+void Guarded_Buzzer::sleep ()
+{
+	Secure lock;
+	Buzzer::sleep();
+}

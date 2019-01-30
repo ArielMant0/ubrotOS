@@ -2,37 +2,37 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                          S C H E D U L E R                                */
+/*                               B U Z Z E R                                 */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Implementierung des Schedulers.                                           */
+/* Mit Hilfe des "Weckers" koennen Prozesse eine bestimmte Zeit lang         */
+/* schlafen und sich dann wecken lassen.                                     */
 /*****************************************************************************/
 
-#ifndef __schedule_include__
-#define __schedule_include__
+#ifndef __Buzzer_include__
+#define __Buzzer_include__
 
-#include "thread/dispatch.h"
-#include "object/queue.h"
-#include "thread/entrant.h"
+#include "meeting/bell.h"
+#include "meeting/waitingroom.h"
 
-class Scheduler : public Dispatcher
+class Buzzer : public Waitingroom, Bell
 {
+
 private:
-    Scheduler(const Scheduler &copy); // Verhindere Kopieren
-    Queue readyList;
+
+    Buzzer(const Buzzer &copy); // Verhindere Kopieren
 
 public:
-	Scheduler() {}
 
-	void ready(Entrant& that);
-	
-	void schedule();
+	Buzzer() : Waitingroom(), Bell() {}
 
- 	void exit();
+	virtual ~Buzzer();
 
- 	void kill(Entrant& that);
+	virtual void ring() override;
 
- 	void resume();
+	void set (int ms);
+
+	void sleep();
 };
 
 #endif

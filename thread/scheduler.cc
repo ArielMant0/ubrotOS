@@ -9,6 +9,10 @@
 /*****************************************************************************/
 
 #include "scheduler.h"
+#include "customer.h"
+#include "user/idle.h"
+
+//IdleThread idle;
 
 /*
  * Mit dieser Methode wird der Prozess that beim Scheduler angemeldet. 
@@ -33,7 +37,6 @@ void Scheduler::schedule()
 		{
 			go(*tmp);
 		}
-		//((Entrant*)tmp)->resume(); // TODO das hier ist schon im dispatch drin
 	}
 }
 
@@ -44,12 +47,29 @@ void Scheduler::schedule()
  */
 void Scheduler::exit()
 {
-	// TODO was ist hier der unterschied zu schedule?
+	// TODO: how to idle
 	Entrant *tmp = (Entrant*)readyList.dequeue();
-	if (tmp) 
+	if (tmp)// && tmp != (Entrant*) &idle)
 	{
 		dispatch(*tmp);
+		return;
 	}
+
+	// TODO: Falls gerade alle Prozesse blockiert sind, muss mit einer geeigneten Methode
+	//       gewartet werden, bis einer lauffähig wird
+	/*while (true)
+	{
+		for (Entrant *e = (Entrant*)tmp->next; e; e = (Entrant*)e->next)
+		{
+			c = (Customer*) e;
+			if (c->waiting_in() == nullptr)
+			{
+				readyList.remove(e);
+				dispatch(*e);
+				return;
+			}
+		}
+	}*/
 }
 
 /*

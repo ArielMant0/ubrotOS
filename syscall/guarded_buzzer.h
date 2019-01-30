@@ -2,37 +2,36 @@
 /* Betriebssysteme                                                           */
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                          S C H E D U L E R                                */
+/*                         G U A R D E D _ B U Z Z E R                       */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-/* Implementierung des Schedulers.                                           */
+/* Schnittstelle von Anwendungsthreads zu Buzzer-Objekten.                   */
 /*****************************************************************************/
 
-#ifndef __schedule_include__
-#define __schedule_include__
+#ifndef __Guarded_Buzzer_include__
+#define __Guarded_Buzzer_include__
 
-#include "thread/dispatch.h"
-#include "object/queue.h"
-#include "thread/entrant.h"
+#include "meeting/buzzer.h"
+#include "guard/secure.h"
 
-class Scheduler : public Dispatcher
+class Guarded_Buzzer : public Buzzer
 {
 private:
-    Scheduler(const Scheduler &copy); // Verhindere Kopieren
-    Queue readyList;
+    
+	Guarded_Buzzer(const Guarded_Buzzer &copy); // Verhindere Kopieren
 
 public:
-	Scheduler() {}
 
-	void ready(Entrant& that);
-	
-	void schedule();
+    Guarded_Buzzer() : Buzzer() {}
 
- 	void exit();
+    virtual ~Guarded_Buzzer()
+    {
+    	Secure lock;
+    }
 
- 	void kill(Entrant& that);
+	void set (int ms);
 
- 	void resume();
+	void sleep ();
 };
 
 #endif
