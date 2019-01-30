@@ -20,13 +20,18 @@ class Loop : public Application
 
 private:
 
-	int m_id, m_x, m_y;
+	int m_id, m_x, m_y, m_iter;
 
 	void printGreeting(int count=0);
 
 public:
 
-	Loop (void* tos, int id, int x, int y) : Application(tos), m_id(id), m_x(x), m_y(y) {} 
+	Loop (void* tos, int id, int x, int y, int iter=500) : 
+		Application(tos),
+		m_id(id),
+		m_x(x),
+		m_y(y),
+		m_iter(iter) {} 
 
 	void action() override;
 };

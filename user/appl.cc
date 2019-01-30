@@ -28,12 +28,12 @@ void Application::action()
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack1[256];
-    Loop p1((void*)(stack1 + (sizeof (stack1) / 8)), 1, 0, 9);
+    Loop p1((void*)(stack1 + (sizeof (stack1) / 8)), 1, 0, 9, 200000);
     g_organizer.ready(p1);
 
     // Mache neue globale stacks und übergebe die loops dem scheduler
     static long stack2[256];
-    Loop p2((void*)(stack2 + (sizeof (stack2) / 8)), 2, 0, 11);
+    Loop p2((void*)(stack2 + (sizeof (stack2) / 8)), 2, 0, 11, 200000);
     g_organizer.ready(p2);
 
     int x, y, counter = 0;
@@ -57,13 +57,11 @@ void Application::action()
 
         // Verwende lock aus einer der vorherigen Aufgaben
         screen_lock.wait();
-        {
-            kout.getpos(x,y);
-            kout.setpos(0,5);
-            kout << "Main Application: " << counter << " (last key: ";// << endl;
-            kout << the_key.ascii() << ')' << endl;
-            kout.setpos(x,y);
-        }
+        kout.getpos(x,y);
+        kout.setpos(0,5);
+        kout << "Main Application: " << counter << " (last key: ";// << endl;
+        kout << the_key.ascii() << ')' << endl;
+        kout.setpos(x,y);
         screen_lock.signal();
 
         //g_organizer.resume();

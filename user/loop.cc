@@ -20,7 +20,7 @@
 
 void Loop::action()
 {
-    for (int count = 1; count <= 200000; count++)
+    for (int count = 1; count <= m_iter; count++)
     {
         printGreeting(count);
 
@@ -38,12 +38,14 @@ void Loop::printGreeting(int count)
     screen_lock.wait();
     kout.getpos(x,y);
     kout.setpos(m_x,m_y);
-    kout << "[ Thread " << m_id << "] (" << count << '/' << 200000 << ')' << endl;
+    kout << "[ Thread " << m_id << "] (" << count << '/' << m_iter << ')' << endl;
     kout.setpos(x,y);
     screen_lock.signal();
 
-    Guarded_Buzzer buzzer;
-    buzzer.set(50);
-    buzzer.sleep();
-
+    if (count > m_iter/2)
+    {
+        Guarded_Buzzer buzzer;
+        buzzer.set(100);
+        buzzer.sleep();
+    }
 }

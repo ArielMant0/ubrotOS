@@ -16,6 +16,8 @@
 #include "machine/cpu.h"
 #include "syscall/guarded_organizer.h"
 
+extern Guarded_Semaphore screen_lock;
+
 class IdleThread : public Application
 {
 
@@ -33,17 +35,20 @@ public:
         int x,y;
     	while (true)
         {
+            screen_lock.wait();
             kout.getpos(x,y);
             kout.setpos(0,15);
             kout << "Idle Thread is running ... " << counter++ << endl;
             kout.setpos(x,y);
+            screen_lock.signal();
 
             g_cpu.idle();
             g_organizer.resume();
         }
     }
 
-    bool is_idle() override{
+    bool is_idle() override
+    {
         return true;
     }
 
